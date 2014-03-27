@@ -52,7 +52,7 @@
 	app.game = {
 		onload: function() {
 
-	        if (!me.video.init('game', gameWidth, gameHeight, true, 'auto')) {
+	        if (!me.video.init('game', gameWidth, gameHeight, true, 1.0)) {
 				alert("Sorry but your browser does not support html 5 canvas.");
 				return;
 	        }
