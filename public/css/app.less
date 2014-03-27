@@ -1,0 +1,34 @@
+// Variables
+@bradius        : 3px;
+@mainBackground : #fff;
+@gameBackground : #eee;
+
+// Desktop sizes
+@desktopWidth: 800px;
+@desktopHeight: 600px;
+
+// Mixins
+.round {
+	border-radius         : @bradius;
+	-moz-border-radius    : @bradius;
+	-webkit-border-radius : @bradius;
+}
+
+// Style
+body {
+	background: @mainBackground;
+}
+
+#game {
+	width      : 100%;
+	background : @gameBackground;
+}
+
+@media only screen and (min-width: 1024px) {
+	#game {
+		width: @desktopWidth;
+		height: @desktopHeight;
+		margin: 5% auto;
+		.round;
+	}
+}
