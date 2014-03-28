@@ -20,7 +20,7 @@ var server     = app.listen(config.port);
 var sio        = io.listen(server);
 
 // Bootstrap db connection
-var db         = mongoose.connect(config.db);
+var db         = mongoose.connect(config.db, { auto_reconnect: true });
 
 // Set up mongoStore
 var mongoStore = new MongoStore({
