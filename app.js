@@ -7,7 +7,8 @@
 
 var express = require('express'),
 routes      = require('./routes'),
-config      = require('./config');
+config      = require('./config'),
+fs          = require('fs');
 
 var app     = express();
 var server  = app.listen(config.port);
@@ -29,6 +30,26 @@ app.configure('development', function(){
 
 var players = [];
 var nextId  = 0;
+
+// Bootstrap models
+var models_path = __dirname + '/models';
+var walk = function(path) {
+    fs.readdirSync(path).forEach(function(file) {
+        var newPath = path + '/' + file;
+        var stat = fs.statSync(newPath);
+        if (stat.isFile()) {
+            if (/(.*)\.(js$|coffee$)/.test(file)) {
+                require(newPath);
+            }
+        } else if (stat.isDirectory()) {
+            walk(newPath);
+        }
+    });
+};
+walk(models_path);
+
+// Routes
+require('./routes')(app);
 
 io.sockets.on('connection', function(socket) {
     var player;
