@@ -13,10 +13,10 @@ block content
       form(role='form', action='/signin', method='post')
         .form-group
             label Username
-            input.form-control(type='text', name='username', placeholder='')
+            input.form-control(type='text', name='username', required)
         .form-group
             label Password
-            input.form-control(type='password', name='password', placeholder='')
+            input.form-control(type='password', name='password', required)
 
         .form-group
           button.btn.btn-lg.btn-danger Login
