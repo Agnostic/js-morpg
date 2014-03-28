@@ -7,12 +7,17 @@
 
 var express = require('express'),
 config      = require('./config'),
-fs          = require('fs');
+fs          = require('fs'),
+mongoose    = require('mongoose');
 
 var app     = express();
 var server  = app.listen(config.port);
 var io      = require('socket.io').listen(server);
+
+// Bootstrap db connection
+var db = mongoose.connect(config.db);
  
+// Express configuration
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -21,6 +26,15 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
+
+  // Express/Mongo session storage
+  app.use(express.session({
+    secret: config.sessionSecret,
+    store: new mongoStore({
+      db: db.connection.db,
+      collection: config.sessionCollection
+    })
+  }));
 });
  
 app.configure('development', function(){
@@ -31,17 +45,17 @@ var players = [];
 var nextId  = 0;
 
 var walk = function(path) {
-    fs.readdirSync(path).forEach(function(file) {
-        var newPath = path + '/' + file;
-        var stat = fs.statSync(newPath);
-        if (stat.isFile()) {
-            if (/(.*)\.(js$|coffee$)/.test(file)) {
-                require(newPath);
-            }
-        } else if (stat.isDirectory()) {
-            walk(newPath);
-        }
-    });
+  fs.readdirSync(path).forEach(function(file) {
+    var newPath = path + '/' + file;
+    var stat = fs.statSync(newPath);
+    if (stat.isFile()) {
+      if (/(.*)\.(js$|coffee$)/.test(file)) {
+          require(newPath);
+      }
+    } else if (stat.isDirectory()) {
+      walk(newPath);
+    }
+  });
 };
 
 // Bootstrap models

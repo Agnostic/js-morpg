@@ -18,10 +18,11 @@
     "multiplayer"
   ],
   "dependencies" : {
-    "express"    : "3.x",
-    "socket.io"  : "1.0.x",
-    "jade"       : "1.3.0",
-    "mongoose"   : "3.8.8",
-    "underscore" : "1.6.0"
+    "express"       : "3.x",
+    "socket.io"     : "1.0.x",
+    "jade"          : "1.3.0",
+    "mongoose"      : "3.8.8",
+    "underscore"    : "1.6.0",
+    "connect-mongo" : "~0.4.0"
   }
 }
