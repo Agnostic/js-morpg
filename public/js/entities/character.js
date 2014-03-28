@@ -17,10 +17,10 @@
             this.updateColRect(20, 24, 44, 16);
 
             // disable gravity
-            this.gravity = 0;
-
+            this.gravity      = 0;
+            
             this.firstUpdates = 2;
-            this.direction = 'down';
+            this.direction    = 'down';
             this.destinationX = x;
             this.destinationY = y;
 
