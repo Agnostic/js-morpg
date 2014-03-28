@@ -15,6 +15,6 @@ then:
 
 	$ node app
 
-When the app is runnig, go to:
+When the app is running, go to:
 
 	http://localhost:3000/
