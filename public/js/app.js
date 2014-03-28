@@ -6,7 +6,8 @@
 		otherPlayers : {}
 	};
 
-	var socket;
+	var socket,
+	noop = function(){};
 
 	var gameWidth = 800,
 	gameHeight    = 600;
@@ -98,6 +99,8 @@
 		var player = app.player = playerEntity;
 		socket     = io.connect();
 
+		var lastPosition = {};
+
 	    socket.on('connect', function() {
 	        socket.emit('logon', player.pos);
 	    });
@@ -110,7 +113,10 @@
 	        });
 
 	        function sendPosition() {
-	            socket.emit('move', player.pos);
+	        	if(lastPosition.x !== player.pos.x || lastPosition.y !== player.pos.y){
+	            	socket.emit('move', player.pos);
+	            	lastPosition = player.pos;
+	            }
 	            timeout = setTimeout(sendPosition, 200);
 	        }
 
@@ -136,7 +142,7 @@
 	        console.log('Disconnected: ', player);
 	        // TODO: Figure out how to remove characters from the map
 	        var character = app.otherPlayers[player.id];
-	        me.game.remove(character);
+	        me.game.remove(character);me.state.pause
 	        delete app.otherPlayers[player.id];
 	    });
 	};
@@ -146,6 +152,11 @@
 
 	// Ready?
 	window.onReady(function() {
+		// Disable pause/resume
+		me.state.pause  = noop;
+		me.state.resume = noop;
+
+		// Load game
 	    app.game.onload();
 	});
 
