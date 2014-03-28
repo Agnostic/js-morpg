@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    User = mongoose.model('User');
+User         = mongoose.model('User');
 
 /**
  * Auth callback
@@ -17,14 +17,39 @@ exports.authCallback = function(req, res) {
  * Login
  */
 exports.signin = function(req, res) {
-    
+
+    if(!req.body.username){
+        return res.render('login', {
+            error: 'Invalid username'
+        });
+    }
+
+    User.findOne({ username: req.body.username }, function(err, doc){
+
+        if(doc){
+
+            if( doc.authenticate(req.body.password) ){
+                console.log('Authenticated!', doc);
+            } else {
+                res.render('login', {
+                    error: 'Incorrect password'
+                });
+            }
+
+        } else {
+            res.render('login', {
+                error: 'User not found'
+            });
+        }
+
+    });
 };
 
 /**
  * Sign up
  */
 exports.signup = function(req, res) {
-    
+    res.render('signup');
 };
 
 /**
