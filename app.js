@@ -6,7 +6,6 @@
 */
 
 var express = require('express'),
-routes      = require('./routes'),
 config      = require('./config'),
 fs          = require('fs');
 
@@ -31,8 +30,6 @@ app.configure('development', function(){
 var players = [];
 var nextId  = 0;
 
-// Bootstrap models
-var models_path = __dirname + '/models';
 var walk = function(path) {
     fs.readdirSync(path).forEach(function(file) {
         var newPath = path + '/' + file;
@@ -46,13 +43,18 @@ var walk = function(path) {
         }
     });
 };
+
+// Bootstrap models
+var models_path = __dirname + '/models';
 walk(models_path);
 
-// Routes
-require('./routes')(app);
+// Bootstrap routes
+var routes_path = __dirname + '/routes';
+walk(routes_path);
 
+// Socket.io
 io.sockets.on('connection', function(socket) {
     require('./socket_events')(socket);
 });
 
-console.log("Express server listening on port " + config.port);
+console.log(config.gameTitle + ' server listening on port ' + config.port);
