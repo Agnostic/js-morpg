@@ -18,6 +18,36 @@ var io      = require('socket.io').listen(server);
 
 // Bootstrap db connection
 var db      = mongoose.connect(config.db);
+
+// socket.io authorization handler (handshake)
+var cookieParser = express.cookieParser(config.sessionSecret);
+io.set('authorization', function (data, callback) {
+  if(!data.headers.cookie) {
+      return callback('No cookie transmitted.', false);
+  }
+
+  // We use the Express cookieParser created before to parse the cookie
+  cookieParser(data, {}, function(parseErr) {
+    if(parseErr) { return callback('Error parsing cookies.', false); }
+
+    // Get the SID cookie
+    var sidCookie = (data.secureCookies && data.secureCookies['express.sid']) ||
+                    (data.signedCookies && data.signedCookies['express.sid']) ||
+                    (data.cookies && data.cookies['express.sid']);
+
+    // Then we just need to load the session from the Express Session Store
+    sessionStore.load(sidCookie, function(err, session) {
+      // And last, we check if the used has a valid session and if he is logged in
+      if (err || !session || !session.user._id) {
+          callback('Not logged in.', false);
+      } else {
+        // Attach session to access from "socket.handshake.session"
+        data.session = session;
+        callback(null, true);
+      }
+    });
+  });
+});
  
 // Express configuration
 app.configure(function(){
@@ -28,7 +58,6 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.cookieParser());
   app.use(express.methodOverride());
-  app.use(app.router);
 
   // Express/Mongo session storage
   app.use(express.session({
@@ -38,19 +67,25 @@ app.configure(function(){
       collection : config.sessionCollection
     })
   }));
+  
+  app.use(app.router);
 });
  
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-var walk = function(path) {
+var walk = function(path, _app) {
   fs.readdirSync(path).forEach(function(file) {
     var newPath = path + '/' + file;
     var stat    = fs.statSync(newPath);
     if (stat.isFile()) {
       if (/(.*)\.(js$|coffee$)/.test(file)) {
-        require(newPath);
+        if(_app){
+          require(newPath)(_app);
+        } else {
+          require(newPath);
+        }
       }
     } else if (stat.isDirectory()) {
       walk(newPath);
@@ -60,11 +95,11 @@ var walk = function(path) {
 
 // Bootstrap models
 var models_path = __dirname + '/models';
-walk(models_path);
+walk(models_path, null);
 
 // Bootstrap routes
 var routes_path = __dirname + '/routes';
-walk(routes_path);
+walk(routes_path, app);
 
 // Socket.io
 io.sockets.on('connection', function(socket) {

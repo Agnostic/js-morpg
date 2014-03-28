@@ -7,6 +7,8 @@ module.exports = function(io, socket){
 	var player;
 
     socket.on('logon', function(pos) {
+        console.log('Session from socket.io', socket.handshake);
+
         // Create the player
         player = { id: nextId++, x: pos.x, y: pos.y };
 
