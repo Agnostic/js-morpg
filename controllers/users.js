@@ -14,12 +14,19 @@ exports.authCallback = function(req, res) {
 };
 
 /**
+ * Login form
+ */
+ exports.signin = function(req, res) {
+    res.render('signin');
+ };
+
+/**
  * Login
  */
-exports.signin = function(req, res) {
+exports.login = function(req, res) {
 
     if(!req.body.username){
-        return res.render('login', {
+        return res.render('signin', {
             error: 'Invalid username'
         });
     }
@@ -31,13 +38,13 @@ exports.signin = function(req, res) {
             if( doc.authenticate(req.body.password) ){
                 console.log('Authenticated!', doc);
             } else {
-                res.render('login', {
+                res.render('signin', {
                     error: 'Incorrect password'
                 });
             }
 
         } else {
-            res.render('login', {
+            res.render('signin', {
                 error: 'User not found'
             });
         }

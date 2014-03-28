@@ -1,0 +1,26 @@
+extends layouts/default.jade
+block content
+
+  .login
+
+    if error
+      .alert.alert-warning.alert-dismissable
+        button.close(type="button", data-dismiss="alert", aria-hidden="true") &times
+        |  #{error}
+
+    .well
+      h1.text-center JavaScript MMO
+      form(role='form', action='/signin', method='post')
+        .form-group
+            label Username
+            input.form-control(type='text', placeholder='Username')
+        .form-group
+            label Password
+            input.form-control(type='password', placeholder='Password')
+
+        .form-group
+          button.btn.btn-lg.btn-danger Login
+      hr
+      p ¿You don't have an account?
+      p
+        a(href='#') Register here
