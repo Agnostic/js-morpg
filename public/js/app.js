@@ -24,7 +24,7 @@
 	app.addPlayer = function(player) {
 		me.ObjectSettings.spritewidth  = 32;
 		me.ObjectSettings.spriteheight = 32;
-		me.ObjectSettings.image        = "player_male_base";
+		me.ObjectSettings.image        = "character";
 		
 		app.otherPlayers[player.id]    = new app.entities.Character(player.x, player.y, me.ObjectSettings);
 		app.otherPlayers[player.id].z  = 3;
@@ -37,7 +37,7 @@
 	app.resources = [
 		{ name: "desert1",          type: "image", src: "data/desert1.png" },
 		{ name: "desert",           type: "tmx",   src: "data/desert.tmx" },
-		{ name: "player_male_base", type: "image", src: "data/player_male_base.png" }
+		{ name: "character",        type: "image", src: "data/sprites/characters.png" }
 	];
 
 	var PlayScreen = me.ScreenObject.extend({

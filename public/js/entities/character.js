@@ -2,6 +2,9 @@
 
     app.entities.Character = me.ObjectEntity.extend({
         init: function(x, y, settings) {
+            settings.spritewidth  = 32;
+            settings.spriteheight = 32;
+
             // call the parent constructor
             this.parent(x, y, settings);
 
@@ -11,7 +14,7 @@
             this.setFriction(0.2, 0.2);
 
             // adjust the bounding box
-            this.updateColRect(20,24, 44, 16);
+            this.updateColRect(20, 24, 44, 16);
 
             // disable gravity
             this.gravity = 0;
@@ -21,14 +24,14 @@
             this.destinationX = x;
             this.destinationY = y;
 
-            this.renderable.addAnimation("stand-down", [0]);
-            this.renderable.addAnimation("stand-left", [7]);
-            this.renderable.addAnimation("stand-up", [14]);
-            this.renderable.addAnimation("stand-right", [21]);
-            this.renderable.addAnimation("down", [1,2,3,4,5,6]);
-            this.renderable.addAnimation("left", [8,9,10,11,12,13]);
-            this.renderable.addAnimation("up", [15,16,17,18,19,20]);
-            this.renderable.addAnimation("right", [22,23,24,25,26,27]);
+            this.renderable.addAnimation("stand-down", [3]);
+            this.renderable.addAnimation("stand-left", [15]);
+            this.renderable.addAnimation("stand-up", [39]);
+            this.renderable.addAnimation("stand-right", [27]);
+            this.renderable.addAnimation("down", [3,4,5]);
+            this.renderable.addAnimation("left", [15,16,17]);
+            this.renderable.addAnimation("up", [39,40,41]);
+            this.renderable.addAnimation("right", [27,28,29]);
         },
 
         update: function() {
