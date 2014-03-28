@@ -1,4 +1,8 @@
 // Socket.io events
+
+var players = {};
+var nextId  = 0;
+
 module.exports = function(socket){
 	var player;
 
@@ -13,7 +17,7 @@ module.exports = function(socket){
         socket.broadcast.emit('connected', player);
 
         // Add client to list of players
-        players.push(player);
+        players[nextId] = player;
     });
 
     socket.on('move', function(data) {
@@ -27,7 +31,7 @@ module.exports = function(socket){
     });
 
     socket.on('disconnect', function() {
-        players.splice(players.indexOf(player), 1);
+        delete players[player.id];
         io.sockets.emit('disconnected', player);
     });
 };

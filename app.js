@@ -44,9 +44,6 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-var players = [];
-var nextId  = 0;
-
 var walk = function(path) {
   fs.readdirSync(path).forEach(function(file) {
     var newPath = path + '/' + file;
