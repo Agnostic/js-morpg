@@ -2,9 +2,12 @@ var users  = require('../controllers/users');
 
 module.exports = function(app) {
 
-  app.post('/signin', users.login);
   app.get('/signin', users.signin);
+  app.post('/signin', users.login);
+
 	app.get('/signup', users.signup);
+  app.post('/signup', users.signup);
+
 	app.get('/signout', users.signout);
 	app.get('/users/me', users.me);
 

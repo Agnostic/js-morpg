@@ -86,7 +86,9 @@ exports.create = function(req, res, next) {
                     message = 'Please fill all the required fields';
             }
 
-            return res.redirect('/signup');
+            return res.render('signup', {
+                error: message
+            });
         }
         req.logIn(user, function(err) {
             if (err) return next(err);
