@@ -1,8 +1,13 @@
 // Index
 module.exports = function(app) {
-    
-    // Home route
+
+    // Index controller
     var index = require('../controllers/index');
-    app.get('/', index.render);
+
+    // Home
+    app.get('/', index.home);
+
+    // Play
+    app.get('/play', index.play);
 
 };
