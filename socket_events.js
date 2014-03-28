@@ -3,7 +3,7 @@
 var players = {};
 var nextId  = 0;
 
-module.exports = function(socket){
+module.exports = function(io, socket){
 	var player;
 
     socket.on('logon', function(pos) {

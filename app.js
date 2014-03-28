@@ -68,7 +68,7 @@ walk(routes_path);
 
 // Socket.io
 io.sockets.on('connection', function(socket) {
-    require('./socket_events')(socket);
+    require('./socket_events')(io, socket);
 });
 
 console.log(config.gameTitle + ' server listening on port ' + config.port);
