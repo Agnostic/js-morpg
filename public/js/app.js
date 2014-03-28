@@ -125,7 +125,7 @@
 	    });
 
 	    socket.on('moved', function(player) {
-	        //console.log("Moved: " + player.id + " " + player.x + "," + player.y);
+	        console.log("Moved: " + player.id + " " + player.x + "," + player.y);
 	        var character = app.otherPlayers[player.id]
 	        if (character) {
 	            character.destinationX = player.x;
@@ -153,8 +153,9 @@
 	// Ready?
 	window.onReady(function() {
 		// Disable pause/resume
-		me.state.pause  = noop;
-		me.state.resume = noop;
+		me.state.pause     = noop;
+		me.state.resume    = noop;
+		me.sys.pauseOnBlur = false;
 
 		// Load game
 	    app.game.onload();
