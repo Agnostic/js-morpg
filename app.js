@@ -5,6 +5,7 @@
 *  Gilberto Avalos <agnosticmusic@gmail.com>
 */
 
+// Dependences
 var express = require('express'),
 config      = require('./config'),
 fs          = require('fs'),
@@ -16,7 +17,7 @@ var server  = app.listen(config.port);
 var io      = require('socket.io').listen(server);
 
 // Bootstrap db connection
-var db = mongoose.connect(config.db);
+var db      = mongoose.connect(config.db);
  
 // Express configuration
 app.configure(function(){
@@ -32,8 +33,8 @@ app.configure(function(){
   app.use(express.session({
     secret: config.sessionSecret,
     store: new mongoStore({
-      db: db.connection.db,
-      collection: config.sessionCollection
+      db         : db.connection.db,
+      collection : config.sessionCollection
     })
   }));
 });
@@ -48,10 +49,10 @@ var nextId  = 0;
 var walk = function(path) {
   fs.readdirSync(path).forEach(function(file) {
     var newPath = path + '/' + file;
-    var stat = fs.statSync(newPath);
+    var stat    = fs.statSync(newPath);
     if (stat.isFile()) {
       if (/(.*)\.(js$|coffee$)/.test(file)) {
-          require(newPath);
+        require(newPath);
       }
     } else if (stat.isDirectory()) {
       walk(newPath);
