@@ -8,7 +8,8 @@
 var express = require('express'),
 config      = require('./config'),
 fs          = require('fs'),
-mongoose    = require('mongoose');
+mongoose    = require('mongoose'),
+mongoStore  = require('connect-mongo')(express);
 
 var app     = express();
 var server  = app.listen(config.port);
