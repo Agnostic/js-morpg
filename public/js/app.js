@@ -103,9 +103,11 @@
 	    });
 
 	    socket.on('players', function(players) {
-	        console.log("Players: " + players);
+	        console.log('Players: ', players);
 
-	        players.forEach(app.addPlayer);
+	        _.each(players, function(player){
+	        	app.addPlayer(player);
+	        });
 
 	        function sendPosition() {
 	            socket.emit('move', player.pos);
@@ -126,12 +128,12 @@
 	    });
 
 	    socket.on('connected', function(player) {
-	        console.log("Connected: " + player);
+	        console.log('Connected: ', player);
 	        app.addPlayer(player);
 	    });
 
 	    socket.on('disconnected', function(player) {
-	        console.log("Disconnected: " + player);
+	        console.log('Disconnected: ', player);
 	        // TODO: Figure out how to remove characters from the map
 	        var character = app.otherPlayers[player.id];
 	        me.game.remove(character);
