@@ -57,6 +57,9 @@
 				return;
 	        }
 
+	        // debug panel
+	        me.plugin.register.defer(debugPanel, "debug");
+
 	        // initialize the "audio"
 	        me.audio.init("mp3,ogg");
 
