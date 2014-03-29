@@ -4,11 +4,9 @@ exports.home = function(req, res){
 
     if(!req.session.user){
       return res.redirect('/signin');
+    } else {
+        res.redirect('/play');
     }
-
-    res.render('index', {
-        user: req.session.user
-    });
 
 };
 

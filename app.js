@@ -57,7 +57,7 @@ sio.set('authorization', function (data, callback) {
 
 // Express configuration
 app.configure(function(){
-  app.set('views', __dirname + '/views');
+  app.set('views', __dirname + '/app/views');
   app.set('view engine', 'jade');
   app.use(express.logger('dev'));
   app.use(express.static(__dirname + '/public'));

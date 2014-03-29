@@ -36,7 +36,8 @@ exports.login = function(req, res) {
         if(doc){
 
             if( doc.authenticate(req.body.password) ){
-                console.log('Authenticated!', doc);
+                req.session.user = doc;
+                res.redirect('/play');
             } else {
                 res.render('signin', {
                     error: 'Incorrect password'
@@ -90,10 +91,8 @@ exports.create = function(req, res, next) {
                 error: message
             });
         }
-        req.logIn(user, function(err) {
-            if (err) return next(err);
-            return res.redirect('/');
-        });
+        req.session.user = user;
+        return res.redirect('/');
     });
 };
 

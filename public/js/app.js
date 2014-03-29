@@ -26,7 +26,7 @@
 		me.ObjectSettings.spritewidth  = 32;
 		me.ObjectSettings.spriteheight = 32;
 		me.ObjectSettings.image        = "character";
-		
+
 		app.otherPlayers[player.id]    = new app.entities.Character(player.x, player.y, me.ObjectSettings);
 		app.otherPlayers[player.id].z  = 3;
 
@@ -115,7 +115,8 @@
 	        function sendPosition() {
 	        	if(lastPosition.x !== player.pos.x || lastPosition.y !== player.pos.y){
 	            	socket.emit('move', player.pos);
-	            	lastPosition = player.pos;
+					lastPosition.x = player.pos.x;
+					lastPosition.y = player.pos.y;
 	            }
 	            timeout = setTimeout(sendPosition, 200);
 	        }
