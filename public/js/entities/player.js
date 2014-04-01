@@ -11,7 +11,7 @@
         // Sprite config
         var characterSprite = 'player';
 
-        if(self.group){
+        if(params.group){
             self.group  = params.group;
             self.sprite = self.group.create(posX, posY, characterSprite);
         } else {
@@ -32,7 +32,8 @@
         var self   = this;
 
         var player = self.sprite,
-        cursors    = self.cursors;
+        cursors    = self.cursors,
+        direction  = '';
 
         if(game.groups.collisionGroup){
             phaser.physics.arcade.collide(self.sprite, game.groups.collisionGroup, onCollision, null, this);
@@ -43,18 +44,22 @@
 
         if (cursors.up.isDown) {
             player.body.velocity.y = -200;
+            direction = 'up';
         } else if (cursors.down.isDown) {
             player.body.velocity.y = 200;
+            direction = 'down';
         }
 
         if (cursors.left.isDown) {
             player.body.velocity.x = -200;
+            direction = 'left';
         } else if (cursors.right.isDown) {
             player.body.velocity.x = 200;
+            direction = 'right';
         }
 
         if(player.lastPosition.x !== player.body.x || player.lastPosition.y !== player.body.y){
-            game.socket.emit('move', { x: player.body.x, y: player.body.y });
+            game.socket.emit('move', { x: player.body.x, y: player.body.y, direction: direction });
             player.lastPosition.x = player.body.x;
             player.lastPosition.y = player.body.y;
         }

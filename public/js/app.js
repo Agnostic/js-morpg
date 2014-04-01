@@ -46,10 +46,30 @@
     var layer        = map.createLayer('Ground');
     layer.resizeWorld();
 
+    // Collision group
+    game.groups.collisionGroup                 = phaser.add.group();
+    game.groups.collisionGroup.enableBody      = true;
+    game.groups.collisionGroup.physicsBodyType = Phaser.Physics.ARCADE;
+
     // Player
     var player_id           = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
-    game.localPlayer        = new game.entities.Player({ _id: player_id, name: 'Local player' });
+    game.localPlayer        = new game.entities.Player({
+      _id   : player_id,
+      name  : 'Local player',
+      group : game.groups.collisionGroup
+    });
     game.players[player_id] = game.localPlayer;
+
+    //  And now we convert all of the Tiled objects with an ID of 1 into sprites within the collision group
+    // map.createFromObjects('CollisionLayer', 1, 'collider', 0, true, false, group);
+
+    // NPC
+    var npc = window.npc = new game.entities.Character({
+      name  : 'NPC',
+      x     : 300,
+      y     : 320,
+      group : game.groups.collisionGroup
+    });
 
     game.socket.emit('logon', {
       _id : player_id,
@@ -57,21 +77,7 @@
       y   : game.localPlayer.sprite.body.y
     });
 
-    // Collision group
-    game.groups.collisionGroup                 = phaser.add.group();
-    game.groups.collisionGroup.enableBody      = true;
-    game.groups.collisionGroup.physicsBodyType = Phaser.Physics.ARCADE;
-
-    //  And now we convert all of the Tiled objects with an ID of 1 into sprites within the collision group
-    // map.createFromObjects('CollisionLayer', 1, 'collider', 0, true, false, group);
-
-    // NPC
-    var npc = new game.entities.Character({
-      name  : 'NPC',
-      x     : 300,
-      y     : 320,
-      group : game.groups.collisionGroup
-    });
+    addSocketListeners();
   }
 
   function collisionHandler(sp1, sp2) {
@@ -80,10 +86,11 @@
 
   function updatePlayers() {
     _.each(game.players, function(player){
-      player.update();
+      player.update && player.update();
     });
   }
 
+  // Main update
   function update() {
     updatePlayers();
   }
@@ -104,39 +111,42 @@
     });
   }
 
-	// Remove player
-  game.socket.on('disconnected', function(player) {
-    console.log('Disconnected: ', player);
-    if(game.players[player._id]){
-      game.players[player._id].kill();
-      delete game.players[player._id];
-    }
-  });
+  function addSocketListeners() {
 
-  // Player has moved
-  game.socket.on('moved', function(_player) {
-      console.log('Moved: ' + _player._id + ' ' + _player.x + ', ' + _player.y);
-      var player = game.players[_player._id];
-      if (player) {
-        player.sprite.body.x = _player.x;
-        player.sprite.body.y = _player.y;
-        console.log(player.sprite.body.x, player.sprite.body.y);
-      } else {
-        addRemotePlayer(_player);
+    // Remove player
+    game.socket.on('disconnected', function(player) {
+      if(game.players[player._id]){
+        game.players[player._id].kill();
+        delete game.players[player._id];
       }
-  });
+    });
 
-  game.socket.on('connected', function(player) {
+    // Player has moved
+    game.socket.on('moved', function(_player) {
+        var player = game.players[_player._id];
+        if (player) {
+          console.log('Moved: ' + _player._id + ' ' + _player.x + ', ' + _player.y);
+          player.sprite.x = _player.x;
+          player.sprite.y = _player.y;
+          // TODO: Add animation
+        } else {
+          addRemotePlayer(_player);
+        }
+    });
+
+    game.socket.on('connected', function(player) {
       addRemotePlayer(player);
-  });
+    });
+
+  }
 
   // Ready?
   $(function() {
     window.phaser = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'game', {
-      preload: preload,
-      create: create,
-      update: update,
-      render: render
+      preload : preload,
+      create  : create,
+      update  : update,
+      render  : render
     });
   });
 

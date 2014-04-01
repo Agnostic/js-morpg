@@ -25,8 +25,9 @@ module.exports = function(io, socket){
 
     socket.on('move', function(data) {
         if (player) {
-            player.x   = data.x;
-            player.y   = data.y;
+            player.x         = data.x;
+            player.y         = data.y;
+            player.direction = data.direction;
 
             // Broadcast position change to all other clients
             socket.broadcast.emit('moved', player);
