@@ -1,45 +1,65 @@
 !function(){
 
-    app.entities.Player = app.entities.Character.extend({
+    function Player(params) {
+        var self   = this;
+        self.id    = params.id;
+        self.x     = params.x;
+        self.y     = params.y;
+        self.name  = params.name;
+        self.group = params.group;
 
-        init: function(x, y, settings) {
-            // call the parent constructor
-            this.parent(x, y, settings);
+        // Sprite config
+        var characterSprite = 'player';
 
-            // set the display to follow our position on both axis
-            me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
-
-            app.localPlayerCreated(this);
-        },
-
-        handleInput: function() {
-            if (me.input.isKeyPressed('left'))
-            {
-                this.vel.x -= this.accel.x * me.timer.tick;
-                this.renderable.setCurrentAnimation('left');
-                this.direction = 'left';
-            }
-            else if (me.input.isKeyPressed('right'))
-            {
-                this.vel.x += this.accel.x * me.timer.tick;
-                this.renderable.setCurrentAnimation('right');
-                this.direction = 'right';
-            }
-
-            if (me.input.isKeyPressed('up'))
-            {
-                this.vel.y = -this.accel.y * me.timer.tick;
-                this.renderable.setCurrentAnimation('up');
-                this.direction = 'up';
-            }
-            else if (me.input.isKeyPressed('down'))
-            {
-                this.vel.y = this.accel.y * me.timer.tick;
-                this.renderable.setCurrentAnimation('down');
-                this.direction = 'down';
-            }
+        if(self.group){
+            self.sprite = self.group.create(self.x, self.y, characterSprite);
+        } else {
+            self.sprite = phaser.add.sprite(self.x, self.y, characterSprite);
+            phaser.physics.enable(self.sprite, Phaser.Physics.ARCADE);
         }
 
-    });
+        self.sprite.name         = self.name;
+        self.sprite.lastPosition = {};
+        self.cursors             = phaser.input.keyboard.createCursorKeys();
+        phaser.camera.follow(self.sprite);
+    }
+
+    var onCollision = function(){
+    };
+
+    Player.prototype.update = function() {
+        var self   = this;
+
+        var player = self.sprite,
+        cursors    = self.cursors;
+
+        if(game.groups.collisionGroup){
+            phaser.physics.arcade.collide(self.sprite, game.groups.collisionGroup, onCollision, null, this);
+        }
+
+        player.body.velocity.x = 0;
+        player.body.velocity.y = 0;
+
+        if (cursors.up.isDown) {
+            player.body.velocity.y = -200;
+        } else if (cursors.down.isDown) {
+            player.body.velocity.y = 200;
+        }
+
+        if (cursors.left.isDown) {
+            player.body.velocity.x = -200;
+        } else if (cursors.right.isDown) {
+            player.body.velocity.x = 200;
+        }
+
+        if(player.lastPosition.x !== player.body.x || player.lastPosition.y !== player.body.y){
+            game.socket.emit('move', { x: player.body.x, y: player.body.y });
+            player.lastPosition.x = player.body.x;
+            player.lastPosition.y = player.body.y;
+        }
+    };
+
+    game.entities        = game.entities || {};
+    game.entities.Player = Player;
 
 }();

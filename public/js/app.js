@@ -1,164 +1,124 @@
 !function(root){
 
-	// App variables
-	var app = root.app = {
-		entities     : {},
-		otherPlayers : {}
-	};
+  // App variables
+  var game = root.game = {
+    entities : {},
+    groups   : {},
+    players  : {}
+  };
 
-	var socket,
-	noop = function(){};
+  game.socket = io.connect(),
+  noop        = function(){};
 
-	var gameWidth = 800,
-	gameHeight    = 600;
+  var gameWidth = 800,
+  gameHeight    = 600;
 
-	if (window.outerWidth < 1024) {
-		$('#game')
-			.css('width', window.outerWidth)
-			.css('height', window.outerHeight);
+  if (window.outerWidth < 1024) {
+    $('#game')
+      .css('width', window.outerWidth)
+      .css('height', window.outerHeight);
 
-		gameWidth  = window.outerWidth;
-		gameHeight = window.outerHeight;
-	}
+    gameWidth  = window.outerWidth;
+    gameHeight = window.outerHeight;
+  }
 
-	// Add player
-	app.addPlayer = function(player) {
-		me.ObjectSettings.spritewidth  = 32;
-		me.ObjectSettings.spriteheight = 32;
-		me.ObjectSettings.image        = "character";
-		
-		app.otherPlayers[player.id]    = new app.entities.Character(player.x, player.y, me.ObjectSettings);
-		app.otherPlayers[player.id].z  = 3;
+  function preload() {
 
-		me.game.add(app.otherPlayers[player.id]);
-		me.game.sort();
-	};
+    // Tilemap
+    phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
+    phaser.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
 
-	// Resources
-	app.resources = [
-		{ name: "desert1",          type: "image", src: "data/desert1.png" },
-		{ name: "desert",           type: "tmx",   src: "data/desert.tmx" },
-		{ name: "character",        type: "image", src: "data/sprites/characters.png" }
-	];
+    // Player
+    phaser.load.image('player','assets/sprites/phaser-dude.png');
 
-	var PlayScreen = me.ScreenObject.extend({
-	    onResetEvent: function() {
-	        // stuff to reset on state change
-	        me.levelDirector.loadLevel("desert");
-	    },
-	    onDestroyEvent: function() {
-	    }
-	});
+  }
 
-	app.game = {
-		onload: function() {
+  function create() {
 
-	        if (!me.video.init('game', gameWidth, gameHeight, true, 1.0)) {
-				alert("Sorry but your browser does not support html 5 canvas.");
-				return;
-	        }
+    // Start physics
+    phaser.physics.startSystem(Phaser.Physics.ARCADE);
 
-	        // debug panel
-	        me.plugin.register.defer(debugPanel, "debug");
+    // Tilemap
+    var map          = phaser.add.tilemap('desert');
+    map.addTilesetImage('Desert', 'tiles');
 
-	        // initialize the "audio"
-	        me.audio.init("mp3,ogg");
+    // Map Layers
+    var layer        = map.createLayer('Ground');
+    layer.resizeWorld();
 
-	        // set all resources to be loaded
-	        me.loader.onload = this.loaded.bind(this);
+    // Player
+    var player_id           = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
+    game.localPlayer        = new game.entities.Player({ name: 'Local player', id: player_id });
+    game.players[player_id] = game.localPlayer;
 
-	        // set all resources to be loaded
-	        me.loader.preload(app.resources);
+    game.socket.emit('logon', { _id: player_id, x: game.localPlayer.sprite.body.x, y: game.localPlayer.sprite.body.y });
 
-	        // load everything & display a loading screen
-	        me.state.change(me.state.LOADING);
-	    },
+    // Collision group
+    game.groups.collisionGroup                 = phaser.add.group();
+    game.groups.collisionGroup.enableBody      = true;
+    game.groups.collisionGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
-	    loaded: function() {
-	        // set the "Play/Ingame" Screen Object
-	        me.state.set(me.state.PLAY, new PlayScreen());
+    //  And now we convert all of the Tiled objects with an ID of 1 into sprites within the collision group
+    // map.createFromObjects('CollisionLayer', 1, 'collider', 0, true, false, group);
 
-	        // add our player entity in the entity pool
-	        me.entityPool.add("mainPlayer", app.entities.Player);
+    // NPC
+    var npc = new game.entities.Character({
+      name: 'NPC',
+      x: 300, y: 320,
+      group: game.groups.collisionGroup
+      });
+  }
 
-	        // enable the keyboard
-	        me.input.bindKey(me.input.KEY.LEFT,  "left");
-	        me.input.bindKey(me.input.KEY.RIGHT, "right");
-	        me.input.bindKey(me.input.KEY.UP,    "up");
-	        me.input.bindKey(me.input.KEY.DOWN,  "down");
+  function collisionHandler(sp1, sp2) {
+    // console.log(sp1, sp2);
+  }
 
-	        //me.debug.renderHitBox = true;
+  function updatePlayers() {
+    _.each(game.players, function(player){
+      player.update();
+    });
+  }
 
-	        // start the game
-	        me.state.change(me.state.PLAY);
-	    }
+  function update() {
+    updatePlayers();
+  }
 
-	};
+  function render() {
+    phaser.debug.cameraInfo(phaser.camera, 32, 32);
+    if(game.localPlayer.x){
+      phaser.debug.spriteCoords(game.localPlayer, 32, 200);
+    }
+  }
 
-	app.localPlayerCreated = function(playerEntity) {
-		var player = app.player = playerEntity;
-		socket     = io.connect();
+	// Remove player
+  game.socket.on('disconnected', function(player) {
+    console.log('Disconnected: ', player);
+    delete game.players[player._id];
+  });
 
-		var lastPosition = {};
+  // Player has moved
+  game.socket.on('moved', function(_player) {
+      console.log("Moved: " + _player._id + " " + _player.x + "," + _player.y);
+      var player = game.players[_player.id];
+      if (player) {
+          player.sprite.body.x = player.x;
+          player.sprite.body.y = player.y;
+      }
+  });
 
-	    socket.on('connect', function() {
-	        socket.emit('logon', player.pos);
-	    });
+  game.socket.on('connected', function(player) {
+      console.log('Connected: ', player);
+      // game.addPlayer(player);
+  });
 
-	    socket.on('players', function(players) {
-	        console.log('Players: ', players);
-
-	        _.each(players, function(player){
-	        	app.addPlayer(player);
-	        });
-
-	        function sendPosition() {
-	        	if(lastPosition.x !== player.pos.x || lastPosition.y !== player.pos.y){
-	            	socket.emit('move', player.pos);
-	            	lastPosition = player.pos;
-	            }
-	            timeout = setTimeout(sendPosition, 200);
-	        }
-
-	        // We're connected and have sent out initial position, start sending out updates
-	        timeout = setTimeout(sendPosition, 200);
-	    });
-
-	    socket.on('moved', function(player) {
-	        console.log("Moved: " + player.id + " " + player.x + "," + player.y);
-	        var character = app.otherPlayers[player.id]
-	        if (character) {
-	            character.destinationX = player.x;
-	            character.destinationY = player.y;
-	        }
-	    });
-
-	    socket.on('connected', function(player) {
-	        console.log('Connected: ', player);
-	        app.addPlayer(player);
-	    });
-
-	    socket.on('disconnected', function(player) {
-	        console.log('Disconnected: ', player);
-	        // TODO: Figure out how to remove characters from the map
-	        var character = app.otherPlayers[player.id];
-	        me.game.remove(character);me.state.pause
-	        delete app.otherPlayers[player.id];
-	    });
-	};
-
-	// Export to window
-	root.app = app;
-
-	// Ready?
-	window.onReady(function() {
-		// Disable pause/resume
-		me.state.pause     = noop;
-		me.state.resume    = noop;
-		me.sys.pauseOnBlur = false;
-
-		// Load game
-	    app.game.onload();
-	});
+  // Ready?
+  $(function() {
+    window.phaser = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'game', {
+      preload: preload,
+      create: create,
+      update: update,
+      render: render
+    });
+  });
 
 }(window);

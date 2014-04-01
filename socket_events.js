@@ -10,7 +10,7 @@ module.exports = function(io, socket){
         console.log('Session from socket.io', socket.handshake.session);
 
         // Create the player
-        player = { id: nextId++, x: pos.x, y: pos.y };
+        player = { _id: pos._id || nextId++, x: pos.x, y: pos.y };
 
         // Send existing players to client
         socket.emit('players', players);
@@ -33,7 +33,9 @@ module.exports = function(io, socket){
     });
 
     socket.on('disconnect', function() {
-        delete players[player.id];
+        if(player){
+            delete players[player.id];
+        }
         io.sockets.emit('disconnected', player);
     });
 };
