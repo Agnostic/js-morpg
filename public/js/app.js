@@ -48,10 +48,14 @@
 
     // Player
     var player_id           = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
-    game.localPlayer        = new game.entities.Player({ name: 'Local player', id: player_id });
+    game.localPlayer        = new game.entities.Player({ _id: player_id, name: 'Local player' });
     game.players[player_id] = game.localPlayer;
 
-    game.socket.emit('logon', { _id: player_id, x: game.localPlayer.sprite.body.x, y: game.localPlayer.sprite.body.y });
+    game.socket.emit('logon', {
+      _id : player_id,
+      x   : game.localPlayer.sprite.body.x,
+      y   : game.localPlayer.sprite.body.y
+    });
 
     // Collision group
     game.groups.collisionGroup                 = phaser.add.group();
@@ -63,10 +67,11 @@
 
     // NPC
     var npc = new game.entities.Character({
-      name: 'NPC',
-      x: 300, y: 320,
-      group: game.groups.collisionGroup
-      });
+      name  : 'NPC',
+      x     : 300,
+      y     : 320,
+      group : game.groups.collisionGroup
+    });
   }
 
   function collisionHandler(sp1, sp2) {
@@ -90,25 +95,39 @@
     }
   }
 
+  function addRemotePlayer(player) {
+    game.players[player._id] = new game.entities.Character({
+      name : 'Remote player',
+      _id  : player._id,
+      x    : player.x,
+      y    : player.y
+    });
+  }
+
 	// Remove player
   game.socket.on('disconnected', function(player) {
     console.log('Disconnected: ', player);
-    delete game.players[player._id];
+    if(game.players[player._id]){
+      game.players[player._id].kill();
+      delete game.players[player._id];
+    }
   });
 
   // Player has moved
   game.socket.on('moved', function(_player) {
-      console.log("Moved: " + _player._id + " " + _player.x + "," + _player.y);
-      var player = game.players[_player.id];
+      console.log('Moved: ' + _player._id + ' ' + _player.x + ', ' + _player.y);
+      var player = game.players[_player._id];
       if (player) {
-          player.sprite.body.x = player.x;
-          player.sprite.body.y = player.y;
+        player.sprite.body.x = _player.x;
+        player.sprite.body.y = _player.y;
+        console.log(player.sprite.body.x, player.sprite.body.y);
+      } else {
+        addRemotePlayer(_player);
       }
   });
 
   game.socket.on('connected', function(player) {
-      console.log('Connected: ', player);
-      // game.addPlayer(player);
+      addRemotePlayer(player);
   });
 
   // Ready?

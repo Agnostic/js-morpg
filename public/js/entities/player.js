@@ -2,19 +2,20 @@
 
     function Player(params) {
         var self   = this;
-        self.id    = params.id;
-        self.x     = params.x;
-        self.y     = params.y;
+        self._id   = params._id;
         self.name  = params.name;
-        self.group = params.group;
+
+        var posX = params.x || 0;
+        var posY = params.y || 0;
 
         // Sprite config
         var characterSprite = 'player';
 
         if(self.group){
-            self.sprite = self.group.create(self.x, self.y, characterSprite);
+            self.group  = params.group;
+            self.sprite = self.group.create(posX, posY, characterSprite);
         } else {
-            self.sprite = phaser.add.sprite(self.x, self.y, characterSprite);
+            self.sprite = phaser.add.sprite(posX, posY, characterSprite);
             phaser.physics.enable(self.sprite, Phaser.Physics.ARCADE);
         }
 
