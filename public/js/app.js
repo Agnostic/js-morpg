@@ -29,7 +29,8 @@
     phaser.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
 
     // Player
-    phaser.load.image('player','assets/sprites/phaser-dude.png');
+    // phaser.load.image('player','assets/sprites/phaser-dude.png');
+    phaser.load.spritesheet('player','assets/sprites/characters.png', 32);
 
   }
 
@@ -59,6 +60,9 @@
       group : game.groups.collisionGroup
     });
     game.players[player_id] = game.localPlayer;
+
+    // game.localPlayer.sprite.animations.add('left', [0, 1, 2], 10);
+    // game.localPlayer.sprite.animations.play('left');
 
     //  And now we convert all of the Tiled objects with an ID of 1 into sprites within the collision group
     // map.createFromObjects('CollisionLayer', 1, 'collider', 0, true, false, group);

@@ -19,6 +19,9 @@
             phaser.physics.enable(self.sprite, Phaser.Physics.ARCADE);
         }
 
+        self.sprite.animations.add('walk');
+        self.sprite.animations.play('walk', 50, true);
+
         self.sprite.name         = self.name;
         self.sprite.lastPosition = {};
         self.cursors             = phaser.input.keyboard.createCursorKeys();
@@ -38,6 +41,9 @@
         if(game.groups.collisionGroup){
             phaser.physics.arcade.collide(self.sprite, game.groups.collisionGroup, onCollision, null, this);
         }
+
+        player.animations.stop();
+        player.frame = 0;
 
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
