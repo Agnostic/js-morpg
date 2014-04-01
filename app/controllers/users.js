@@ -37,6 +37,7 @@ exports.login = function(req, res) {
 
             if( doc.authenticate(req.body.password) ){
                 console.log('Authenticated!', doc);
+                req.session.user = doc;
                 res.redirect('/play');
             } else {
                 res.render('signin', {
@@ -91,6 +92,7 @@ exports.create = function(req, res, next) {
                 error: message
             });
         }
+
         req.user = user;
         res.redirect('/play');
     });

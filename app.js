@@ -54,10 +54,10 @@ sio.set('authorization', function (data, callback) {
     }
   }
 });
- 
+
 // Express configuration
 app.configure(function(){
-  app.set('views', __dirname + '/views');
+  app.set('views', __dirname + '/app/views');
   app.set('view engine', 'jade');
   app.use(express.logger('dev'));
   app.use(express.static(__dirname + '/public'));
@@ -74,7 +74,7 @@ app.configure(function(){
 
   app.use(app.router);
 });
- 
+
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
@@ -98,16 +98,16 @@ var walk = function(path, _app) {
 };
 
 // Bootstrap models
-var models_path = __dirname + '/models';
+var models_path = __dirname + '/app/models';
 walk(models_path, null);
 
 // Bootstrap routes
-var routes_path = __dirname + '/routes';
+var routes_path = __dirname + '/app/routes';
 walk(routes_path, app);
 
 // Socket.io
 sio.sockets.on('connection', function(socket) {
-    require('./socket_events')(sio, socket);
+    require('./app/socket_events')(sio, socket);
 });
 
 console.log(config.gameTitle + ' server listening on port ' + config.port);
