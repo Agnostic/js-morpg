@@ -63,33 +63,30 @@
 
     Character.prototype.update = function() {
         var self               = this;
-        var player             = self.sprite,
-        velocityX              = 0,
-        velocityY              = 0;
+        var player             = self.sprite;
 
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
 
-        if (self.direction === 'up') {
-            velocityY = -baseVelocity;
-        } else if (self.direction === 'down') {
-            velocityY = baseVelocity;
-        }
+        if (self.destinationY && parseInt(self.destinationY, 10) !== parseInt(player.y, 10)) {
+            var playerY  = player.y,
+            destinationY = self.destinationY;
 
-        if (self.direction === 'left') {
-            velocityX = -baseVelocity;
-        } else if (self.direction === 'right') {
-            velocityX = baseVelocity;
-        }
-
-        if(self.destinationY && self.destinationY !== player.y){
-            player.body.velocity.y = velocityY;
+            if (playerY > destinationY){
+                player.body.velocity.y = -baseVelocity;
+            } else if (playerY < destinationY) {
+                player.body.velocity.y = baseVelocity;
+            }
         } else {
             self.destinationY = false;
         }
 
-        if(self.destinationX && self.destinationX !== player.x){
-            player.body.velocity.x = velocityX;
+        if (self.destinationX && parseInt(self.destinationX, 10) !== parseInt(player.x, 10)) {
+            if (player.x < self.destinationX) {
+                player.body.velocity.x = baseVelocity;
+            } else if (player.x > self.destinationX) {
+                player.body.velocity.x = -baseVelocity;
+            }
         } else {
             self.destinationX = false;
         }

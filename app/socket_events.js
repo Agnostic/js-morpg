@@ -15,7 +15,7 @@ module.exports = function(io, socket){
             _id       : player_id,
             x         : data.x,
             y         : data.y,
-            direction : data.direction || 'down'
+            direction : data.direction || { y: 'down' }
         };
 
         // Send existing players to client

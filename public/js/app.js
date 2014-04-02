@@ -113,7 +113,7 @@
   }
 
   function moveRemotePlayer(player, data) {
-    console.log('Moved: ', data);
+    // console.log('Moved: ', data);
     // player.sprite.x  = player.x;
     // player.sprite.y  = player.y;
 
@@ -168,6 +168,10 @@
       update  : update,
       render  : render
     });
+
+    // Disable window blur/focus events
+    phaser.gamePaused  = noop;
+    phaser.gameResumed = noop;
   });
 
 }(window);
