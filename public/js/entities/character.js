@@ -40,6 +40,18 @@
         text.x = posX + (self.sprite.width / 2) + 5;
         text.y = posY - 5;
 
+        self.sprite.animations.add('stand-down', [0]);
+        self.sprite.animations.add('walk-down', [0, 1, 2]);
+
+        self.sprite.animations.add('stand-left', [12]);
+        self.sprite.animations.add('walk-left', [12, 13, 14]);
+
+        self.sprite.animations.add('stand-right', [24]);
+        self.sprite.animations.add('walk-right', [25, 26, 27]);
+
+        self.sprite.animations.add('stand-up', [36]);
+        self.sprite.animations.add('walk-up', [36, 37, 38]);
+
         self.playerName = text;
     }
 

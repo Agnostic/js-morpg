@@ -76,10 +76,6 @@
         self.playerName.x = player.x + (player.width / 2) + 5;
         self.playerName.y = player.y - 5;
 
-        // player.animations.play('stand-'+self.direction);
-        // player.animations.stop();
-        // player.frame = 0;
-
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
 
