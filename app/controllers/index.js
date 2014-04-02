@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 // Index controller
 exports.home = function(req, res){
     req.session = req.session || {};
@@ -12,9 +14,14 @@ exports.home = function(req, res){
 
 exports.play = function(req, res){
     if(!req.session.user){
-        res.redirect('/login');
+        return res.redirect('/login');
     }
+
+    var userData = _.clone(req.session.user);
+    delete userData.hashed_password;
+    delete userData.salt;
+
     res.render('play', {
-        user: JSON.stringify(req.session.user)
+        user: JSON.stringify(userData)
     });
 };

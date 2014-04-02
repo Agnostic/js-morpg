@@ -36,8 +36,6 @@ exports.login = function(req, res) {
         if(doc){
 
             if( doc.authenticate(req.body.password) ){
-                delete doc.hashed_password;
-                delete doc.salt;
                 req.session.user = doc;
                 res.redirect('/play');
             } else {
