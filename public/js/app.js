@@ -66,13 +66,13 @@
     game.groups.collisionGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
     // Player
-    var player_id           = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
+    var random_id           = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
     game.localPlayer        = new game.entities.Player({
-      _id   : player_id,
+      _id   : user._id || random_id,
       name  : user.username || 'Local player',
       group : game.groups.collisionGroup
     });
-    game.players[player_id] = game.localPlayer;
+    game.players[user._id] = game.localPlayer;
 
     //  And now we convert all of the Tiled objects with an ID of 1 into sprites within the collision group
     // map.createFromObjects('CollisionLayer', 1, 'collider', 0, true, false, group);
@@ -86,7 +86,7 @@
     });
 
     game.socket.emit('logon', {
-      _id : player_id,
+      _id : user._id,
       x   : game.localPlayer.sprite.body.x,
       y   : game.localPlayer.sprite.body.y
     });
@@ -140,6 +140,14 @@
   // Socket.io events
   function addSocketListeners() {
 
+    game.socket.on('alert', function(data){
+      alert(data.message);
+    });
+
+    game.socket.on('disconnect', function(data){
+      location.href = '/signout';
+    });
+
     // New player connected
     game.socket.on('connected', function(player) {
       console.log('New player online: ', player);
@@ -171,7 +179,20 @@
       });
     });
 
+    game.socket.on('new_message', function(data){
+      var html = "<b>" + data.from + ":</b> " + data.message + "<br/>";
+      $('.messages').append(html);
+    });
+
   }
+
+  game.sendMessage = function(e){
+    game.socket.emit('message', { message: $('#chat-text').val() });
+    $('#chat-text').val('').blur();
+
+    e && e.preventDefault();
+    return false;
+  };
 
   // Ready?
   $(function() {

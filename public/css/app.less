@@ -15,6 +15,12 @@
 }
 
 // Style
+* {
+	box-sizing         : border-box;
+	-webkit-box-sizing : border-box;
+	-moz-box-sizing    : border-box;
+}
+
 body {
 	background: @mainBackground;
 }
@@ -50,14 +56,29 @@ body {
 		left       : 0;
 		background : rgba(0,0,0, 0.5);
 
-		input {
-			border-radius: 0;
+		#chat-form {
+			margin  : 0;
+			padding : 0;
+
+			input {
+				position      : relative;
+				top           : 2px;
+				display       : inline-block;
+				border-radius : 0;
+				width         : 90%
+			}
+
+			button {
+				width: 10%;
+			}
 		}
 
 		.messages {
+			color          : white;
 			overflow-x     : hidden;
 			overflow-y     : auto;
 			height         : 100px;
+			padding        : 3px;
 			padding-bottom : 22px;
 		}
 	}

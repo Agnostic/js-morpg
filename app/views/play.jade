@@ -4,7 +4,9 @@ block content
       #game
       .chat
         .messages
-        input.form-control(type='text')
+        form#chat-form(name='chat-form', onsubmit="return game.sendMessage();", action="#")
+          input#chat-text.form-control(type='text')
+          button.btn.btn-primary(type='submit') Send
 
     //- Socket.io
     script(src="/socket.io/socket.io.js")
