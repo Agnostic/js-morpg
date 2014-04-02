@@ -2,9 +2,10 @@
 
   // App variables
   var game = root.game = {
-    entities : {},
-    groups   : {},
-    players  : {}
+    entities      : {},
+    groups        : {},
+    players       : {},
+    use_random_id : true
   };
 
   game.socket = io.connect(),
@@ -66,13 +67,19 @@
     game.groups.collisionGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
     // Player
-    var random_id           = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
+    var user_id;
+    if(game.use_random_id){
+      user_id = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
+    } else {
+      user_id = user._id;
+    }
+
     game.localPlayer        = new game.entities.Player({
-      _id   : user._id || random_id,
+      _id   : user_id,
       name  : user.username || 'Local player',
       group : game.groups.collisionGroup
     });
-    game.players[user._id] = game.localPlayer;
+    game.players[user_id] = game.localPlayer;
 
     //  And now we convert all of the Tiled objects with an ID of 1 into sprites within the collision group
     // map.createFromObjects('CollisionLayer', 1, 'collider', 0, true, false, group);
@@ -86,7 +93,7 @@
     });
 
     game.socket.emit('logon', {
-      _id : user._id,
+      _id : user_id,
       x   : game.localPlayer.sprite.body.x,
       y   : game.localPlayer.sprite.body.y
     });

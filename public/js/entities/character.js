@@ -1,6 +1,6 @@
 !function(){
 
-    var baseVelocity = 150;
+    var baseVelocity = 170;
 
     function Character(params) {
         var self       = this;

@@ -1,6 +1,6 @@
 !function(){
 
-    var velocity = 150;
+    var velocity = 140;
 
     function Player(params) {
         var self       = this;
@@ -8,8 +8,8 @@
         self.name      = params.name;
         self.direction = params.direction || 'down';
 
-        var posX       = params.x || 0;
-        var posY       = params.y || 0;
+        var posX       = params.x || 100;
+        var posY       = params.y || 100;
 
         // Sprite config
         var characterSprite = 'player';
