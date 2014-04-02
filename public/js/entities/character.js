@@ -74,8 +74,10 @@
 
             if (playerY > destinationY){
                 player.body.velocity.y = -baseVelocity;
+                direction              = 'up';
             } else if (playerY < destinationY) {
                 player.body.velocity.y = baseVelocity;
+                direction              = 'down';
             }
         } else {
             self.destinationY = false;
@@ -84,11 +86,19 @@
         if (self.destinationX && parseInt(self.destinationX, 10) !== parseInt(player.x, 10)) {
             if (player.x < self.destinationX) {
                 player.body.velocity.x = baseVelocity;
+                direction              = 'right';
             } else if (player.x > self.destinationX) {
                 player.body.velocity.x = -baseVelocity;
+                direction              = 'left';
             }
         } else {
             self.destinationX = false;
+        }
+
+        if( player.body.velocity.x || player.body.velocity.y ) {
+            self.sprite.animations.play('walk-'+direction, 5, true);
+        } else {
+            self.sprite.animations.play('stand-'+direction, 5, true);
         }
 
         self.playerName.x      = player.x + (player.width / 2) + 5;
