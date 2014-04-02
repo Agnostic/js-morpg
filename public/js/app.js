@@ -24,6 +24,9 @@
 
   function preload() {
 
+    // Disable window blur/focus events
+    phaser.stage.disableVisibilityChange = true;
+
     // Tilemap
     phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
     phaser.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
@@ -168,10 +171,6 @@
       update  : update,
       render  : render
     });
-
-    // Disable window blur/focus events
-    phaser.gamePaused  = noop;
-    phaser.gameResumed = noop;
   });
 
 }(window);
