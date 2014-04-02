@@ -98,8 +98,8 @@
 
   function render() {
     phaser.debug.cameraInfo(phaser.camera, 32, 32);
-    if(game.localPlayer.x){
-      phaser.debug.spriteCoords(game.localPlayer, 32, 200);
+    if(game.localPlayer.sprite){
+      phaser.debug.spriteCoords(game.localPlayer.sprite, 32, 110);
     }
   }
 
