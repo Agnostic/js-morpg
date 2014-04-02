@@ -1,6 +1,10 @@
 extends layouts/default.jade
 block content
-    #game
+    #container
+      #game
+      .chat
+        .messages
+        input.form-control(type='text')
 
     //- Socket.io
     script(src="/socket.io/socket.io.js")

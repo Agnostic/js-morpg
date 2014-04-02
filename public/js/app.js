@@ -14,7 +14,7 @@
   gameHeight    = 600;
 
   if (window.outerWidth < 1024) {
-    $('#game')
+    $('#game, #container')
       .css('width', window.outerWidth)
       .css('height', window.outerHeight);
 

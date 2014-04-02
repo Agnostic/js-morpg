@@ -4,8 +4,8 @@
 @gameBackground : #eee;
 
 // Desktop sizes
-@desktopWidth: 800px;
-@desktopHeight: 600px;
+@desktopWidth   : 800px;
+@desktopHeight  : 600px;
 
 // Mixins
 .round {
@@ -23,13 +23,13 @@ body {
 	width  : 500px;
 	margin : 10% auto;
 
-	h1{
-		font-size: 24px;
-		margin-top: 10px;
+	h1 {
+		font-size  : 24px;
+		margin-top : 10px;
 	}
 }
 
-#game {
+#game, #container {
 	width      : 100%;
 	background : @gameBackground;
 
@@ -38,11 +38,35 @@ body {
 	}
 }
 
+#container {
+	position : relative;
+	height   : 100px;
+
+	.chat {
+		width      : 100%;
+		position   : absolute;
+		bottom     : 0;
+		left       : 0;
+		background : rgba(0,0,0, 0.5);
+
+		input {
+			border-radius: 0;
+		}
+
+		.messages {
+			overflow-x     : hidden;
+			overflow-y     : auto;
+			height         : 100px;
+			padding-bottom : 22px;
+		}
+	}
+}
+
 @media only screen and (min-width: 1024px) {
-	#game {
-		width: @desktopWidth;
-		height: @desktopHeight;
-		margin: 0 auto;
+	#game, #container {
+		width  : @desktopWidth;
+		height : @desktopHeight;
+		margin : 0 auto;
 		.round;
 	}
 }
