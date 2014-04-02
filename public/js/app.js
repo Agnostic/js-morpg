@@ -112,31 +112,50 @@
     });
   }
 
+  function moveRemotePlayer(player, data) {
+    console.log('Moved: ', data);
+    // player.sprite.x  = player.x;
+    // player.sprite.y  = player.y;
+
+    // Experimental
+    player.destinationX = data.x;
+    player.destinationY = data.y;
+    player.direction    = data.direction;
+    // TODO: Add animation
+  }
+
+  // Socket.io events
   function addSocketListeners() {
+
+    // New player connected
+    game.socket.on('connected', function(player) {
+      console.log('New player online: ', player);
+      addRemotePlayer(player);
+    });
 
     // Remove player
     game.socket.on('disconnected', function(player) {
       if(game.players[player._id]){
-        game.players[player._id].kill();
+        game.players[player._id].sprite.kill();
         delete game.players[player._id];
       }
     });
 
     // Player has moved
-    game.socket.on('moved', function(_player) {
-        var player = game.players[_player._id];
+    game.socket.on('moved', function(data) {
+        var player = game.players[data._id];
         if (player) {
-          console.log('Moved: ' + _player._id + ' ' + _player.x + ', ' + _player.y);
-          player.sprite.x = _player.x;
-          player.sprite.y = _player.y;
-          // TODO: Add animation
+          moveRemotePlayer(player, data);
         } else {
-          addRemotePlayer(_player);
+          addRemotePlayer(data);
         }
     });
 
-    game.socket.on('connected', function(player) {
-      addRemotePlayer(player);
+    // Get online players
+    game.socket.on('players', function(players){
+      _.each(players, function(player){
+        addRemotePlayer(player);
+      });
     });
 
   }

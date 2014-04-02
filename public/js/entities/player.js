@@ -6,10 +6,10 @@
         var self       = this;
         self._id       = params._id;
         self.name      = params.name;
-        self.direction = 'down';
+        self.direction = params.direction || 'down';
 
-        var posX = params.x || 0;
-        var posY = params.y || 0;
+        var posX       = params.x || 0;
+        var posY       = params.y || 0;
 
         // Sprite config
         var characterSprite = 'player';
@@ -22,25 +22,25 @@
             phaser.physics.enable(self.sprite, Phaser.Physics.ARCADE);
         }
 
-        var text = phaser.add.text(200, 200, self.name);
+        var text             = phaser.add.text(200, 200, self.name);
+        text.align           = 'center';
         text.anchor.set(0.6);
-        text.align = 'center';
 
         //  Font style
-        text.font = 'Arial';
-        text.fontSize = 12;
-        text.fontWeight = 'bold';
+        text.font            = 'Arial';
+        text.fontSize        = 12;
+        text.fontWeight      = 'bold';
 
         //  Stroke color and thickness
-        text.stroke = '#000000';
+        text.stroke          = '#000000';
         text.strokeThickness = 3;
-        text.fill = '#fff';
-        text.z = 100;
+        text.fill            = '#fff';
+        text.z               = 100;
 
-        text.x = posX + (self.sprite.width / 2) + 5;
-        text.y = posY - 5;
+        text.x               = posX + (self.sprite.width / 2) + 5;
+        text.y               = posY - 5;
 
-        self.playerName = text;
+        self.playerName      = text;
 
         self.sprite.animations.add('stand-down', [0]);
         self.sprite.animations.add('walk-down', [0, 1, 2]);
@@ -67,7 +67,8 @@
         var self   = this;
 
         var player = self.sprite,
-        cursors    = self.cursors;
+        cursors    = self.cursors,
+        moveParams = {};
 
         if(game.groups.collisionGroup){
             phaser.physics.arcade.collide(self.sprite, game.groups.collisionGroup, onCollision, null, this);
@@ -79,21 +80,26 @@
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
 
+        // Up/Down
         if (cursors.up.isDown) {
             player.body.velocity.y = -velocity;
-            self.direction = 'up';
+            self.direction         = 'up';
+            moveParams.velY        = -velocity;
         } else if (cursors.down.isDown) {
             player.body.velocity.y = velocity;
-            self.direction = 'down';
-            self.sprite.animations.play('walk-down', 5, true);
+            self.direction         = 'down';
+            moveParams.velY        = velocity;
         }
 
+        // Left/Right
         if (cursors.left.isDown) {
             player.body.velocity.x = -velocity;
-            self.direction = 'left';
+            self.direction         = 'left';
+            moveParams.velX        = -velocity;
         } else if (cursors.right.isDown) {
             player.body.velocity.x = velocity;
-            self.direction = 'right';
+            self.direction         = 'right';
+            moveParams.velX        = velocity;
         }
 
         if( player.body.velocity.x || player.body.velocity.y ) {
@@ -103,7 +109,12 @@
         }
 
         if(player.lastPosition.x !== player.body.x || player.lastPosition.y !== player.body.y){
-            game.socket.emit('move', { x: player.body.x, y: player.body.y, direction: self.direction });
+            moveParams.x         = player.body.x;
+            moveParams.y         = player.body.y;
+            moveParams.direction = self.direction;
+
+            game.socket.emit('move', moveParams);
+
             player.lastPosition.x = player.body.x;
             player.lastPosition.y = player.body.y;
         }
