@@ -7,10 +7,11 @@ module.exports = function(io, socket){
 	var player;
 
     socket.on('logon', function(pos) {
+        var user = socket.handshake.session.user || {};
         console.log('Session from socket.io', socket.handshake.session);
 
         // Create the player
-        player = { _id: pos._id || nextId++, x: pos.x, y: pos.y };
+        player = { _id: pos._id || nextId++, x: pos.x, y: pos.y, name: user.username };
 
         // Send existing players to client
         socket.emit('players', players);

@@ -11,7 +11,10 @@ exports.home = function(req, res){
 };
 
 exports.play = function(req, res){
+    if(!req.session.user){
+        res.redirect('/login');
+    }
     res.render('play', {
-        user: req.session.user
+        user: JSON.stringify(req.session.user)
     });
 };

@@ -30,7 +30,7 @@
 
     // Player
     // phaser.load.image('player','assets/sprites/phaser-dude.png');
-    phaser.load.spritesheet('player','assets/sprites/characters.png', 32);
+    phaser.load.spritesheet('player','assets/sprites/characters.png', 32, 32);
 
   }
 
@@ -56,7 +56,7 @@
     var player_id           = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
     game.localPlayer        = new game.entities.Player({
       _id   : player_id,
-      name  : 'Local player',
+      name  : user.username || 'Local player',
       group : game.groups.collisionGroup
     });
     game.players[player_id] = game.localPlayer;
@@ -108,10 +108,10 @@
 
   function addRemotePlayer(player) {
     game.players[player._id] = new game.entities.Character({
-      name : 'Remote player',
       _id  : player._id,
       x    : player.x,
-      y    : player.y
+      y    : player.y,
+      name : player.name || 'Remote player'
     });
   }
 
