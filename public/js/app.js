@@ -24,8 +24,15 @@
 
   function preload() {
 
-    // Disable window blur/focus events
+    // phaser.onBlur                        = noop;
+    // phaser.onFocus                       = noop;
+    // phaser.onPause                       = noop;
+    // phaser.onResume                      = noop;
+    phaser.stage.checkVisibility         = noop;
     phaser.stage.disableVisibilityChange = true;
+    phaser.stage.visibilityChange        = noop;
+    phaser.focusLoss                     = noop;
+    phaser.focusGain                     = noop;
 
     // Tilemap
     phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
@@ -38,6 +45,9 @@
   }
 
   function create() {
+
+    // Disable pause on blur
+    this.stage.disableVisibilityChange = true;
 
     // Start physics
     phaser.physics.startSystem(Phaser.Physics.ARCADE);
@@ -138,7 +148,7 @@
 
     // Remove player
     game.socket.on('disconnected', function(player) {
-      if(game.players[player._id]){
+      if(player && game.players[player._id]){
         game.players[player._id].sprite.kill();
         delete game.players[player._id];
       }
@@ -146,12 +156,12 @@
 
     // Player has moved
     game.socket.on('moved', function(data) {
-        var player = game.players[data._id];
-        if (player) {
-          moveRemotePlayer(player, data);
-        } else {
-          addRemotePlayer(data);
-        }
+      var player = game.players[data._id];
+      if (player) {
+        moveRemotePlayer(player, data);
+      } else {
+        addRemotePlayer(data);
+      }
     });
 
     // Get online players
