@@ -63,7 +63,8 @@
 
     Character.prototype.update = function() {
         var self               = this;
-        var player             = self.sprite;
+        var player             = self.sprite,
+        positionOffset         = 5;
 
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
@@ -71,7 +72,7 @@
         self.playerName.x      = player.x + (player.width / 2) + 5;
         self.playerName.y      = player.y - 5;
 
-        if (self.destinationX && self.destinationX < player.x - 5)
+        if (self.destinationX && self.destinationX < player.x - positionOffset)
         {
             player.body.velocity.x = -baseVelocity;
             self.direction = 'left';
@@ -79,7 +80,7 @@
                 self.destinationX = false;
             }
         }
-        else if (self.destinationX && self.destinationX > player.x + 5)
+        else if (self.destinationX && self.destinationX > player.x + positionOffset)
         {
             player.body.velocity.x = baseVelocity;
             self.direction = 'right';
@@ -88,7 +89,7 @@
             }
         }
 
-        if (self.destinationY && self.destinationY < player.y - 5)
+        if (self.destinationY && self.destinationY < player.y - positionOffset)
         {
             player.body.velocity.y = -baseVelocity;
             self.direction = 'up';
@@ -96,7 +97,7 @@
                 self.destinationY = false;
             }
         }
-        else if (self.destinationY && self.destinationY > player.y + 5)
+        else if (self.destinationY && self.destinationY > player.y + positionOffset)
         {
             player.body.velocity.y = baseVelocity;
             self.direction = 'down';

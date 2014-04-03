@@ -6,6 +6,7 @@
     entities      : {},
     groups        : {},
     players       : {},
+    enableDebug   : true,
     use_random_id : true
   };
 
@@ -30,11 +31,11 @@
     // phaser.onFocus                       = noop;
     // phaser.onPause                       = noop;
     // phaser.onResume                      = noop;
-    phaser.stage.checkVisibility         = noop;
+    // phaser.stage.checkVisibility         = noop;
     phaser.stage.disableVisibilityChange = true;
-    phaser.stage.visibilityChange        = noop;
-    phaser.focusLoss                     = noop;
-    phaser.focusGain                     = noop;
+    // phaser.stage.visibilityChange        = false;
+    // phaser.focusLoss                     = noop;
+    // phaser.focusGain                     = noop;
 
     // Tilemap
     phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
@@ -49,7 +50,7 @@
   function create() {
 
     // Disable pause on blur
-    this.stage.disableVisibilityChange = true;
+    phaser.stage.disableVisibilityChange = true;
 
     // Start physics
     phaser.physics.startSystem(Phaser.Physics.ARCADE);
@@ -121,10 +122,9 @@
   }
 
   function render() {
-    phaser.debug.cameraInfo(phaser.camera, 32, 32);
-    if(game.localPlayer.sprite){
-      phaser.debug.spriteCoords(game.localPlayer.sprite, 32, 110);
-    }
+    // if (game.localPlayer.sprite) {
+    //   phaser.debug.spriteCoords(game.localPlayer.sprite, 20, 20);
+    // }
   }
 
   function addRemotePlayer(player) {
@@ -198,9 +198,18 @@
 
   }
 
+  game.debug = function(message){
+    if(game.enableDebug){
+      if(arguments.length){
+        message = Array.prototype.join.call(arguments, ', ');
+      }
+      addChatMessage("<span class='debug'><b>[DBG] </b>" + message + "</span><br/>");
+    }
+  }
+
   function addChatMessage(message){
-	message = "<span class='message-time'>" + new Date().toTimeString().substr(0, 8) + '</span>&nbsp;&nbsp;' + message;
-	$('.messages').append(message).scrollTop($('.messages')[0].scrollHeight);
+  	message = "<span class='message-time'>" + new Date().toTimeString().substr(0, 8) + '</span>&nbsp;&nbsp;' + message;
+  	$('.messages').append(message).scrollTop($('.messages')[0].scrollHeight);
   }
 
   game.sendMessage = function(e){

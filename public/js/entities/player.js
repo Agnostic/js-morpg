@@ -1,6 +1,6 @@
 !function(){
 
-    var velocity = 140;
+    var baseVelocity = 140;
 
     function Player(params) {
         var self       = this;
@@ -58,17 +58,29 @@
         self.sprite.lastPosition = {};
         self.cursors             = phaser.input.keyboard.createCursorKeys();
         phaser.camera.follow(self.sprite);
+
+        // Touch control
+        phaser.input.onDown.add(handleTouch, this);
+    }
+
+    function handleTouch(pointer) {
+        var player          = game.localPlayer;
+        player.destinationX = pointer.x;
+        player.destinationY = pointer.y;
+        game.debug('Moving player to -> x: ' + pointer.x + ' x: ' + pointer.y);
+        // player.direction    = data.direction;
     }
 
     var onCollision = function(){
     };
 
     Player.prototype.update = function() {
-        var self   = this;
+        var self       = this;
 
-        var player = self.sprite,
-        cursors    = self.cursors,
-        moveParams = {};
+        var player     = self.sprite,
+        cursors        = self.cursors,
+        moveParams     = {},
+        positionOffset = 10;
 
         if(game.groups.collisionGroup){
             phaser.physics.arcade.collide(self.sprite, game.groups.collisionGroup, onCollision, null, this);
@@ -80,26 +92,44 @@
         self.playerName.x = player.x + (player.width / 2) + 5;
         self.playerName.y = player.y - 5;
 
+        // Moved to destination (touch)
+        if (self.destinationX && self.destinationX < player.x - positionOffset) {
+            self.direction = 'left';
+            player.body.velocity.x = -baseVelocity;
+        } else if (self.destinationX && self.destinationX > player.x + positionOffset) {
+            self.direction = 'right';
+            player.body.velocity.x = baseVelocity;
+        }
+
+        if (self.destinationY && self.destinationY < player.y - positionOffset) {
+            player.body.velocity.y = -baseVelocity;
+            self.direction = 'up';
+        } else if (self.destinationY && self.destinationY > player.y + positionOffset) {
+            player.body.velocity.y = baseVelocity;
+            self.direction = 'down';
+        }
+        // End of moved to destination
+
         // Up/Down
         if (cursors.up.isDown) {
-            player.body.velocity.y = -velocity;
+            player.body.velocity.y = -baseVelocity;
             self.direction         = 'up';
-            moveParams.velY        = -velocity;
+            moveParams.velY        = -baseVelocity;
         } else if (cursors.down.isDown) {
-            player.body.velocity.y = velocity;
+            player.body.velocity.y = baseVelocity;
             self.direction         = 'down';
-            moveParams.velY        = velocity;
+            moveParams.velY        = baseVelocity;
         }
 
         // Left/Right
         if (cursors.left.isDown) {
-            player.body.velocity.x = -velocity;
+            player.body.velocity.x = -baseVelocity;
             self.direction         = 'left';
-            moveParams.velX        = -velocity;
+            moveParams.velX        = -baseVelocity;
         } else if (cursors.right.isDown) {
-            player.body.velocity.x = velocity;
+            player.body.velocity.x = baseVelocity;
             self.direction         = 'right';
-            moveParams.velX        = velocity;
+            moveParams.velX        = baseVelocity;
         }
 
         if( player.body.velocity.x || player.body.velocity.y ) {
@@ -118,6 +148,9 @@
             player.lastPosition.x = player.body.x;
             player.lastPosition.y = player.body.y;
         }
+
+        player.destinationX = 0;
+        player.destinationY = 0;
     };
 
     game.entities        = game.entities || {};
