@@ -32,7 +32,7 @@
     // phaser.onPause                       = noop;
     // phaser.onResume                      = noop;
     // phaser.stage.checkVisibility         = noop;
-    phaser.stage.disableVisibilityChange = true;
+    // phaser.stage.disableVisibilityChange = true;
     // phaser.stage.visibilityChange        = false;
     // phaser.focusLoss                     = noop;
     // phaser.focusGain                     = noop;
