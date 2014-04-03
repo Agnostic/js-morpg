@@ -22,8 +22,8 @@
             phaser.physics.enable(self.sprite, Phaser.Physics.ARCADE);
         }
 
-        self.sprite.name           = self.name;
-        self.sprite.body.immovable = true;
+        self.sprite.name              = self.name;
+        self.sprite.body.immovable    = true;
 
         var text             = phaser.add.text(200, 200, self.name);
         text.align           = 'center';
@@ -80,6 +80,9 @@
                 self.direction         = 'down';
             }
         } else {
+            // if(self.destinationY !== false){
+            //     player.y = self.destinationY;
+            // }
             self.destinationY = false;
         }
 
@@ -92,6 +95,9 @@
                 self.direction         = 'left';
             }
         } else {
+            // if(self.destinationX !== false){
+            //     player.x = self.destinationX;
+            // }
             self.destinationX = false;
         }
 

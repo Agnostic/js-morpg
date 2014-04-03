@@ -2,6 +2,7 @@
 
   // App variables
   var game = root.game = {
+  	title         : 'js-mmo',
     entities      : {},
     groups        : {},
     players       : {},
@@ -98,6 +99,9 @@
       y   : game.localPlayer.sprite.body.y
     });
 
+    var html = "<span class='motd'>Welcome to "+game.title+"!</span><br/>";
+    addChatMessage(html);
+
     addSocketListeners();
   }
 
@@ -164,6 +168,7 @@
     // Remove player
     game.socket.on('disconnected', function(player) {
       if(player && game.players[player._id]){
+      	game.players[player._id].playerName.destroy();
         game.players[player._id].sprite.kill();
         delete game.players[player._id];
       }
@@ -188,13 +193,20 @@
 
     game.socket.on('new_message', function(data){
       var html = "<b>" + data.from + ":</b> " + data.message + "<br/>";
-      $('.messages').append(html);
+      addChatMessage(html);
     });
 
   }
 
+  function addChatMessage(message){
+	message = "<span class='message-time'>" + new Date().toTimeString().substr(0, 8) + '</span>&nbsp;&nbsp;' + message;
+	$('.messages').append(message).scrollTop($('.messages')[0].scrollHeight);
+  }
+
   game.sendMessage = function(e){
     game.socket.emit('message', { message: $('#chat-text').val() });
+    var html = "<span class='me'><b>" + game.localPlayer.name + ":</b> " + $('#chat-text').val() + "</span><br/>";
+    addChatMessage(html);
     $('#chat-text').val('').blur();
 
     e && e.preventDefault();
