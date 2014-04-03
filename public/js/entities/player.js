@@ -74,11 +74,11 @@
             phaser.physics.arcade.collide(self.sprite, game.groups.collisionGroup, onCollision, null, this);
         }
 
-        self.playerName.x = player.x + (player.width / 2) + 5;
-        self.playerName.y = player.y - 5;
-
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
+
+        self.playerName.x = player.x + (player.width / 2) + 5;
+        self.playerName.y = player.y - 5;
 
         // Up/Down
         if (cursors.up.isDown) {

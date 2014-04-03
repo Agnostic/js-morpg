@@ -68,6 +68,9 @@
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
 
+        self.playerName.x      = player.x + (player.width / 2) + 5;
+        self.playerName.y      = player.y - 5;
+
         if (self.destinationY && parseInt(self.destinationY, 10) !== parseInt(player.y, 10)) {
             var playerY  = player.y,
             destinationY = self.destinationY;
@@ -106,9 +109,6 @@
         } else {
             self.sprite.animations.play('stand-'+self.direction, 5, true);
         }
-
-        self.playerName.x      = player.x + (player.width / 2) + 5;
-        self.playerName.y      = player.y - 5;
 
         if(game.groups.collisionGroup){
             phaser.physics.arcade.collide(self.sprite, game.groups.collisionGroup, onCollision, null, this);
