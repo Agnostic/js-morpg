@@ -71,38 +71,72 @@
         self.playerName.x      = player.x + (player.width / 2) + 5;
         self.playerName.y      = player.y - 5;
 
-        if (self.destinationY && parseInt(self.destinationY, 10) !== parseInt(player.y, 10)) {
-            var playerY  = player.y,
-            destinationY = self.destinationY;
-
-            if (playerY > destinationY){
-                player.body.velocity.y = -baseVelocity;
-                self.direction         = 'up';
-            } else if (playerY < destinationY) {
-                player.body.velocity.y = baseVelocity;
-                self.direction         = 'down';
+        if (self.destinationX && self.destinationX < player.x - 5)
+        {
+            player.body.velocity.x = -baseVelocity;
+            self.direction = 'left';
+            if ( parseInt(self.destinationX, 10) === parseInt(player.x, 10) ){
+                self.destinationX = false;
             }
-        } else {
-            // if(self.destinationY !== false){
-            //     player.y = self.destinationY;
-            // }
-            self.destinationY = false;
+        }
+        else if (self.destinationX && self.destinationX > player.x + 5)
+        {
+            player.body.velocity.x = baseVelocity;
+            self.direction = 'right';
+            if ( parseInt(self.destinationX, 10) === parseInt(player.x, 5) ){
+                self.destinationX = false;
+            }
         }
 
-        if (self.destinationX && parseInt(self.destinationX, 10) !== parseInt(player.x, 10)) {
-            if (player.x < self.destinationX) {
-                player.body.velocity.x = baseVelocity;
-                self.direction         = 'right';
-            } else if (player.x > self.destinationX) {
-                player.body.velocity.x = -baseVelocity;
-                self.direction         = 'left';
+        if (self.destinationY && self.destinationY < player.y - 5)
+        {
+            player.body.velocity.y = -baseVelocity;
+            self.direction = 'up';
+            if ( parseInt(self.destinationY, 10) === parseInt(player.y, 10) ){
+                self.destinationY = false;
             }
-        } else {
-            // if(self.destinationX !== false){
-            //     player.x = self.destinationX;
-            // }
-            self.destinationX = false;
         }
+        else if (self.destinationY && self.destinationY > player.y + 5)
+        {
+            player.body.velocity.y = baseVelocity;
+            self.direction = 'down';
+            if ( parseInt(self.destinationX, 10) === parseInt(player.x, 10) ){
+                self.destinationX = false;
+            }
+        }
+
+        // if (self.destinationY && parseInt(self.destinationY, 10) !== parseInt(player.y, 10)) {
+        //     var playerY  = player.y,
+        //     destinationY = self.destinationY;
+
+        //     if (playerY > destinationY){
+        //         player.body.velocity.y = -baseVelocity;
+        //         self.direction         = 'up';
+        //     } else if (playerY < destinationY) {
+        //         player.body.velocity.y = baseVelocity;
+        //         self.direction         = 'down';
+        //     }
+        // } else {
+        //     // if(self.destinationY !== false){
+        //     //     player.y = self.destinationY;
+        //     // }
+        //     self.destinationY = false;
+        // }
+
+        // if (self.destinationX && parseInt(self.destinationX, 10) !== parseInt(player.x, 10)) {
+        //     if (player.x < self.destinationX) {
+        //         player.body.velocity.x = baseVelocity;
+        //         self.direction         = 'right';
+        //     } else if (player.x > self.destinationX) {
+        //         player.body.velocity.x = -baseVelocity;
+        //         self.direction         = 'left';
+        //     }
+        // } else {
+        //     // if(self.destinationX !== false){
+        //     //     player.x = self.destinationX;
+        //     // }
+        //     self.destinationX = false;
+        // }
 
         if( player.body.velocity.x || player.body.velocity.y ) {
             self.sprite.animations.play('walk-'+self.direction, 5, true);
