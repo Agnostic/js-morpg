@@ -14,7 +14,7 @@ exports.home = function(req, res){
 
 exports.play = function(req, res){
     if(!req.session.user){
-        return res.redirect('/login');
+        return res.redirect('/signin');
     }
 
     var userData = _.clone(req.session.user);

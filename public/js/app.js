@@ -15,13 +15,13 @@
   var gameWidth = 800,
   gameHeight    = 600;
 
-  if (window.outerWidth < 1024) {
+  if (window.innerWidth < 1024) {
     $('#game, #container')
-      .css('width', window.outerWidth)
-      .css('height', window.outerHeight);
+      .css('width', window.innerWidth)
+      .css('height', window.innerHeight);
 
-    gameWidth  = window.outerWidth;
-    gameHeight = window.outerHeight;
+    gameWidth  = window.innerWidth;
+    gameHeight = window.innerHeight;
   }
 
   function preload() {
