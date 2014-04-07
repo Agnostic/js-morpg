@@ -6,6 +6,7 @@
         var self       = this;
         self._id       = params._id;
         self.name      = params.name;
+        self.type      = 'remote';
         self.direction = params.direction || 'down';
 
         var posX       = params.x || 0;

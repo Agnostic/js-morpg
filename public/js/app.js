@@ -150,6 +150,15 @@
     // TODO: Add animation
   }
 
+  function movePlayer(_player) {
+    var player = game.players[_player._id];
+    if (player) {
+      moveRemotePlayer(player, _player);
+    } else {
+      addRemotePlayer(_player);
+    }
+  }
+
   // Socket.io events
   function addSocketListeners() {
 
@@ -177,13 +186,8 @@
     });
 
     // Player has moved
-    game.socket.on('moved', function(data) {
-      var player = game.players[data._id];
-      if (player) {
-        moveRemotePlayer(player, data);
-      } else {
-        addRemotePlayer(data);
-      }
+    game.socket.on('moved', function(_player) {
+      movePlayer(_player);
     });
 
     // Get online players
@@ -197,6 +201,14 @@
       var html = "<b>" + data.from + ":</b> " + data.message + "<br/>";
       addChatMessage(html);
     });
+
+    window.onfocus = function(){
+      _.each(game.players, function(player){
+        if(player.type === 'remote'){
+          phaser.physics.arcade.moveToXY(player.sprite, self.destinationX, self.destinationY, 1, 1);
+        }
+      });
+    };
 
   }
 
