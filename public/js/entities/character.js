@@ -56,6 +56,13 @@
         self.sprite.animations.add('walk-up', [36, 37, 38]);
 
         self.playerName = text;
+
+        // Testing
+        self.sprite.body.bounce.y     = 0;
+        self.sprite.body.gravity.y    = 0;
+        self.sprite.body.bounce.x     = 0;
+        self.sprite.body.gravity.x    = 0;
+        self.sprite.body.allowGravity = false;
     }
 
     var onCollision = function(){
@@ -72,39 +79,46 @@
         self.playerName.x      = player.x + (player.width / 2) + 5;
         self.playerName.y      = player.y - 5;
 
-        if (self.destinationX && self.destinationX < player.x - positionOffset)
-        {
-            player.body.velocity.x = -baseVelocity;
-            self.direction = 'left';
-            if ( parseInt(self.destinationX, 10) === parseInt(player.x, 10) ){
-                self.destinationX = false;
-            }
-        }
-        else if (self.destinationX && self.destinationX > player.x + positionOffset)
-        {
-            player.body.velocity.x = baseVelocity;
-            self.direction = 'right';
-            if ( parseInt(self.destinationX, 10) === parseInt(player.x, 5) ){
-                self.destinationX = false;
-            }
+        phaser.physics.arcade.moveToXY(player, self.destinationX, self.destinationY, 10, baseVelocity);
+
+        if (parseInt(self.destinationX, 10) === parseInt(player.x, 10) && parseInt(self.destinationY, 10) === parseInt(player.y, 10)) {
+            player.body.velocity.x = 0;
+            player.body.velocity.y = 0;
         }
 
-        if (self.destinationY && self.destinationY < player.y - positionOffset)
-        {
-            player.body.velocity.y = -baseVelocity;
-            self.direction = 'up';
-            if ( parseInt(self.destinationY, 10) === parseInt(player.y, 10) ){
-                self.destinationY = false;
-            }
-        }
-        else if (self.destinationY && self.destinationY > player.y + positionOffset)
-        {
-            player.body.velocity.y = baseVelocity;
-            self.direction = 'down';
-            if ( parseInt(self.destinationX, 10) === parseInt(player.x, 10) ){
-                self.destinationX = false;
-            }
-        }
+        // if (self.destinationX && self.destinationX < player.x - positionOffset)
+        // {
+        //     player.body.velocity.x = -baseVelocity;
+        //     self.direction = 'left';
+        //     if ( parseInt(self.destinationX, 10) === parseInt(player.x, 10) ){
+        //         self.destinationX = false;
+        //     }
+        // }
+        // else if (self.destinationX && self.destinationX > player.x + positionOffset)
+        // {
+        //     player.body.velocity.x = baseVelocity;
+        //     self.direction = 'right';
+        //     if ( parseInt(self.destinationX, 10) === parseInt(player.x, 5) ){
+        //         self.destinationX = false;
+        //     }
+        // }
+
+        // if (self.destinationY && self.destinationY < player.y - positionOffset)
+        // {
+        //     player.body.velocity.y = -baseVelocity;
+        //     self.direction = 'up';
+        //     if ( parseInt(self.destinationY, 10) === parseInt(player.y, 10) ){
+        //         self.destinationY = false;
+        //     }
+        // }
+        // else if (self.destinationY && self.destinationY > player.y + positionOffset)
+        // {
+        //     player.body.velocity.y = baseVelocity;
+        //     self.direction = 'down';
+        //     if ( parseInt(self.destinationX, 10) === parseInt(player.x, 10) ){
+        //         self.destinationX = false;
+        //     }
+        // }
 
         // if (self.destinationY && parseInt(self.destinationY, 10) !== parseInt(player.y, 10)) {
         //     var playerY  = player.y,

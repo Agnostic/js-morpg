@@ -8,7 +8,7 @@ module.exports = function(io, socket){
     var player;
 
     socket.on('logon', function(data) {
-        console.log('Session from socket.io', socket.handshake.session);
+        console.log('Session from socket.io', socket.handshake);
         var player_id = data._id || nextId++;
 
         if(sockets[player_id]){

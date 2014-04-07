@@ -60,7 +60,16 @@
         phaser.camera.follow(self.sprite);
 
         // Touch control
-        phaser.input.onDown.add(handleTouch, this);
+        if(navigator.platform.match(/ios/gi) || navigator.platform.match(/android/gi)){
+            phaser.input.onDown.add(handleTouch, this);
+        }
+
+        // Testing
+        self.sprite.body.bounce.y     = 0;
+        self.sprite.body.gravity.y    = 0;
+        self.sprite.body.bounce.x     = 0;
+        self.sprite.body.gravity.x    = 0;
+        self.sprite.body.allowGravity = false;
     }
 
     function handleTouch(pointer) {
@@ -94,19 +103,19 @@
 
         // Moved to destination (touch)
         if (self.destinationX && self.destinationX < player.x - positionOffset) {
-            self.direction = 'left';
+            self.direction         = 'left';
             player.body.velocity.x = -baseVelocity;
         } else if (self.destinationX && self.destinationX > player.x + positionOffset) {
-            self.direction = 'right';
+            self.direction         = 'right';
             player.body.velocity.x = baseVelocity;
         }
 
         if (self.destinationY && self.destinationY < player.y - positionOffset) {
             player.body.velocity.y = -baseVelocity;
-            self.direction = 'up';
+            self.direction         = 'up';
         } else if (self.destinationY && self.destinationY > player.y + positionOffset) {
             player.body.velocity.y = baseVelocity;
-            self.direction = 'down';
+            self.direction         = 'down';
         }
         // End of moved to destination
 
@@ -139,9 +148,9 @@
         }
 
         if(player.lastPosition.x !== player.body.x || player.lastPosition.y !== player.body.y){
-            moveParams.x         = player.body.x;
-            moveParams.y         = player.body.y;
-            moveParams.direction = self.direction;
+            moveParams.x          = player.body.x;
+            moveParams.y          = player.body.y;
+            moveParams.direction  = self.direction;
 
             game.socket.emit('move', moveParams);
 
