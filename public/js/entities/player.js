@@ -60,7 +60,8 @@
         phaser.camera.follow(self.sprite);
 
         // Touch control
-        if(navigator.platform.match(/ios/gi) || navigator.platform.match(/android/gi)){
+        game.debug('userAgent -> ' + navigator.userAgent);
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             phaser.input.onDown.add(handleTouch, this);
         }
 
@@ -101,23 +102,35 @@
         self.playerName.x = player.x + (player.width / 2) + 5;
         self.playerName.y = player.y - 5;
 
-        // Moved to destination (touch)
-        if (self.destinationX && self.destinationX < player.x - positionOffset) {
-            self.direction         = 'left';
-            player.body.velocity.x = -baseVelocity;
-        } else if (self.destinationX && self.destinationX > player.x + positionOffset) {
-            self.direction         = 'right';
-            player.body.velocity.x = baseVelocity;
+        // // Moved to destination (touch)
+        // if (self.destinationX && self.destinationX < player.x - positionOffset) {
+        //     self.direction         = 'left';
+        //     player.body.velocity.x = -baseVelocity;
+        // } else if (self.destinationX && self.destinationX > player.x + positionOffset) {
+        //     self.direction         = 'right';
+        //     player.body.velocity.x = baseVelocity;
+        // }
+
+        // if (self.destinationY && self.destinationY < player.y - positionOffset) {
+        //     player.body.velocity.y = -baseVelocity;
+        //     self.direction         = 'up';
+        // } else if (self.destinationY && self.destinationY > player.y + positionOffset) {
+        //     player.body.velocity.y = baseVelocity;
+        //     self.direction         = 'down';
+        // }
+        // // End of moved to destination
+
+        // Touch
+        if (self.destinationY || self.destinationY){
+            phaser.physics.arcade.moveToXY(player, self.destinationX, self.destinationY, 10, baseVelocity);
         }
 
-        if (self.destinationY && self.destinationY < player.y - positionOffset) {
-            player.body.velocity.y = -baseVelocity;
-            self.direction         = 'up';
-        } else if (self.destinationY && self.destinationY > player.y + positionOffset) {
-            player.body.velocity.y = baseVelocity;
-            self.direction         = 'down';
+        if (parseInt(self.destinationX, 10) === parseInt(player.x, 10) && parseInt(self.destinationY, 10) === parseInt(player.y, 10)) {
+            player.body.velocity.x = 0;
+            player.body.velocity.y = 0;
+            self.destinationX      = false;
+            self.destinationY      = false;
         }
-        // End of moved to destination
 
         // Up/Down
         if (cursors.up.isDown) {

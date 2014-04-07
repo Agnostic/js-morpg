@@ -94,6 +94,8 @@
       group : game.groups.collisionGroup
     });
 
+    $('.chat').fadeIn('slow');
+
     game.socket.emit('logon', {
       _id : user_id,
       x   : game.localPlayer.sprite.body.x,
