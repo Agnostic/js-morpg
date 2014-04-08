@@ -110,4 +110,7 @@ sio.sockets.on('connection', function(socket) {
     require('./app/socket_events')(sio, socket);
 });
 
+// Mobs
+var mobs = require('./app/game/mobs')(sio.sockets);
+
 console.log(config.gameTitle + ' server listening on port ' + config.port);

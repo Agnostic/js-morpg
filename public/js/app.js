@@ -202,6 +202,10 @@
       addChatMessage(html);
     });
 
+    game.socket.on('updateMobs', function(mobs){
+      console.log('updateMobs');
+    });
+
     window.onfocus = function(){
       _.each(game.players, function(player){
         if(player.type === 'remote'){
