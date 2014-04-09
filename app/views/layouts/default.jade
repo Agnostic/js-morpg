@@ -6,13 +6,17 @@ html
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="description", content="")
         meta(name="viewport", content="width=device-width, initial-scale=1")
-        link(rel="stylesheet", href="/css/bootstrap.min.css")
-        link(rel="stylesheet/less", type="text/css", href="/css/app.less")
-        script(src="/js/vendor/less-1.7.0.min.js")
-        script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+
+        //- Browsers Only
         script.
-            window.jQuery || document.write('<script src="/js/vendor/jquery-1.11.0.min.js"><\/script>')
-        script(src="/js/vendor/bootstrap.min.js")
+            if(!navigator.isCocoonJS){
+                document.write('<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>')
+                document.write('<link rel="stylesheet/less" type="text/css" href="/css/app.less"/>')
+                document.write('<script src="/js/vendor/less-1.7.0.min.js"><\/script>')
+                document.write('<script src="/js/vendor/jquery-1.11.0.min.js"><\/script>')
+                document.write('<script src="/js/vendor/bootstrap.min.js"><\/script>')
+            }
+
         script(src="/js/vendor/underscore-min.js")
         script.
             var user;

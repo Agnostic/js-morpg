@@ -10,16 +10,55 @@
     use_random_id : true
   };
 
-  game.socket = io.connect(),
+  io.connect = function (host, details) {
+    // var global;
+    var uri = io.util.parseUri(host)
+      , uuri
+      , socket;
+
+    // if (global && global.location) {
+    //   uri.protocol = uri.protocol || global.location.protocol.slice(0, -1);
+    //   uri.host = uri.host || (global.document
+    //     ? global.document.domain : global.location.hostname);
+    //   uri.port = uri.port || global.location.port;
+    // }
+
+    console.log('URI', uri);
+    uuri = io.util.uniqueUri(uri);
+
+    var options = {
+        host: uri.host
+      , secure: 'https' == uri.protocol
+      , port: uri.port || ('https' == uri.protocol ? 443 : 80)
+      , query: uri.query || ''
+    };
+
+    io.util.merge(options, details);
+
+    if (options['force new connection'] || !io.sockets[uuri]) {
+      socket = new io.Socket(options);
+    }
+
+    if (!options['force new connection'] && socket) {
+      io.sockets[uuri] = socket;
+    }
+
+    socket = socket || io.sockets[uuri];
+
+    // if path is different from '' or /
+    return socket.of(uri.path.length > 1 ? uri.path : '');
+  };
+
+  game.socket = io.connect(location.protocol + '//' + location.host); // + http://192.168.34.210:3000'),
   noop        = function(){};
 
   var gameWidth = 800,
   gameHeight    = 600;
 
   if (window.innerWidth < 1024) {
-    $('#game, #container')
-      .css('width', window.innerWidth)
-      .css('height', window.innerHeight);
+    // $('#game, #container')
+    //   .css('width', window.innerWidth)
+    //   .css('height', window.innerHeight);
 
     gameWidth  = window.innerWidth;
     gameHeight = window.innerHeight;
@@ -94,7 +133,7 @@
       group : game.groups.collisionGroup
     });
 
-    $('.chat').fadeIn('slow');
+    // $('.chat').fadeIn('slow');
 
     game.socket.emit('logon', {
       _id : user_id,
@@ -106,6 +145,14 @@
     addChatMessage(html);
 
     addSocketListeners();
+  }
+
+  function addText(text, x, y){
+    var context = game.canvas.getContext('2d');
+    context.font = "45px arial";
+    context.textAlign = "left";
+    context.fillStyle = "#ffffff";
+    context.fillText(text, game.world.centerX, game.world.centerY);
   }
 
   function collisionHandler(sp1, sp2) {
@@ -203,7 +250,13 @@
     });
 
     game.socket.on('updateMobs', function(mobs){
-      console.log('updateMobs');
+      _.each(mobs, function(mob){
+        if(!game.players[mob._id]){
+          addRemotePlayer(mob);
+        } else {
+          movePlayer(mob);
+        }
+      });
     });
 
     window.onfocus = function(){
@@ -227,27 +280,28 @@
 
   function addChatMessage(message){
   	message = "<span class='message-time'>" + new Date().toTimeString().substr(0, 8) + '</span>&nbsp;&nbsp;' + message;
-  	$('.messages').append(message).scrollTop($('.messages')[0].scrollHeight);
+  	// $('.messages').append(message).scrollTop($('.messages')[0].scrollHeight);
   }
 
   game.sendMessage = function(e){
     game.socket.emit('message', { message: $('#chat-text').val() });
-    var html = "<span class='me'><b>" + game.localPlayer.name + ":</b> " + $('#chat-text').val() + "</span><br/>";
+    // var html = "<span class='me'><b>" + game.localPlayer.name + ":</b> " + $('#chat-text').val() + "</span><br/>";
     addChatMessage(html);
-    $('#chat-text').val('').blur();
+    // $('#chat-text').val('').blur();
 
     e && e.preventDefault();
     return false;
   };
 
   // Ready?
-  $(function() {
-    window.phaser = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'game', {
+  window.onload = function(){
+    var target = (navigator.isCocoonJS) ? '' : 'game';
+    window.phaser = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, target, {
       preload : preload,
       create  : create,
       update  : update,
       render  : render
     });
-  });
+  };
 
 }(window);
