@@ -80,6 +80,9 @@
     phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
     phaser.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
 
+    // Fonts
+    phaser.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
+
     // Player
     // phaser.load.image('player','assets/sprites/phaser-dude.png');
     phaser.load.spritesheet('player','assets/sprites/characters.png', 32, 32);
@@ -134,25 +137,22 @@
     });
 
     // $('.chat').fadeIn('slow');
-
+    // Logon event
     game.socket.emit('logon', {
       _id : user_id,
       x   : game.localPlayer.sprite.body.x,
       y   : game.localPlayer.sprite.body.y
     });
 
+    // Motd
     var html = "<span class='motd'>Welcome to "+game.title+"!</span><br/>";
     addChatMessage(html);
 
-    addSocketListeners();
-  }
+    // Text example
+    var text = phaser.add.bitmapText(100, 100, 'default','Bitmap Fonts!', 16);
 
-  function addText(text, x, y){
-    var context = game.canvas.getContext('2d');
-    context.font = "45px arial";
-    context.textAlign = "left";
-    context.fillStyle = "#ffffff";
-    context.fillText(text, game.world.centerX, game.world.centerY);
+    // Socket.io events
+    addSocketListeners();
   }
 
   function collisionHandler(sp1, sp2) {
