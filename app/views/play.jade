@@ -14,8 +14,13 @@ block content
     //- Melon
     script(src="/js/vendor/phaser.js")
 
+    //- CocoonJS
+    script.
+      if (navigator.isCocoonJS) {
+        document.write('<script src="/js/utils/xmlParser.js"><\/script>')
+      }
+
     //- Game
-    script(src="js/app.js")
-    script(src="js/utils/xmlParser.js")
-    script(src="js/entities/character.js")
-    script(src="js/entities/player.js")
+    script(src="/js/app.js")
+    script(src="/js/entities/character.js")
+    script(src="/js/entities/player.js")

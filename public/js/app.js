@@ -81,7 +81,8 @@
     phaser.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
 
     // Fonts
-    phaser.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
+    var fontFile = (navigator.isCocoonJS) ? 'default.xml' : 'default_desktop.xml';
+    phaser.load.bitmapFont('default', 'assets/fonts/default.png', 'assets/fonts/' + fontFile);
 
     // Player
     // phaser.load.image('player','assets/sprites/phaser-dude.png');
