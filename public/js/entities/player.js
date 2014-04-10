@@ -85,8 +85,8 @@
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
 
-        self.playerName.x = player.x + (player.width / 2) + 5;
-        self.playerName.y = player.y - 5;
+        self.playerName.x = (player.x + (player.width/2)) - (self.playerName.textWidth/2);
+        self.playerName.y = player.y - self.playerName.textHeight;
 
         // // Moved to destination (touch)
         // if (self.destinationX && self.destinationX < player.x - positionOffset) {
