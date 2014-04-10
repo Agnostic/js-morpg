@@ -49,13 +49,13 @@
     return socket.of(uri.path.length > 1 ? uri.path : '');
   };
 
-  game.socket = io.connect(location.protocol + '//' + location.host); // + http://192.168.34.210:3000'),
+  game.socket = io.connect(location.protocol + '//' + location.host);
   noop        = function(){};
 
   var gameWidth = 800,
   gameHeight    = 600;
 
-  if (window.innerWidth < 1024) {
+  if (navigator.isCocoonJS) {
     // $('#game, #container')
     //   .css('width', window.innerWidth)
     //   .css('height', window.innerHeight);
@@ -81,9 +81,15 @@
     // phaser.load.image('player','assets/sprites/phaser-dude.png');
     phaser.load.spritesheet('player','assets/sprites/characters.png', 32, 32);
 
+    phaser.canvas.id = 'canvas';
   }
 
   function create() {
+
+    // CocoonJS.App.showTextDialog('Título', 'Mensaje', 'Texto', CocoonJS.App.KeyboardType.TEXT, 'Cancel', 'Ok');
+    // CocoonJS.App.onTextDialogFinished.addEventListener(function(text){
+    //   // console.log('Value:', text);
+    // });
 
     // Start physics
     phaser.physics.startSystem(Phaser.Physics.ARCADE);

@@ -43,3 +43,6 @@ DOMishObject.prototype.getElementsByTagName = function(name) {
         Array.isArray(this.attributes[name]) ?
         this.attributes[name] : [this.attributes[name]] : [];
 };
+DOMishObject.prototype.getAttribute = function(name) {
+    return this.attributes[name];
+};
