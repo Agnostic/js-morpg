@@ -25,7 +25,6 @@
 
         var text          = phaser.add.bitmapText(100, 100, 'default', self.name, 16);
         self.playerName   = text;
-
         self.playerName.x = (self.sprite.x + (self.sprite.width/2)) - (self.playerName.textWidth/2);
         self.playerName.y = self.sprite.y - self.playerName.textHeight;
 
