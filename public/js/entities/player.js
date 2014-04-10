@@ -23,11 +23,25 @@
             phaser.physics.enable(self.sprite, Phaser.Physics.ARCADE);
         }
 
-        var text          = phaser.add.bitmapText(100, 100, 'default', self.name, 16);
-        self.playerName   = text;
+        var text             = phaser.add.text(200, 200, self.name);
+        text.align           = 'center';
+        text.anchor.set(0.6);
 
-        self.playerName.x = (self.sprite.x + (self.sprite.width/2)) - (self.playerName.textWidth/2);
-        self.playerName.y = self.sprite.y - self.playerName.textHeight;
+        //  Font style
+        text.font            = 'Arial';
+        text.fontSize        = 12;
+        text.fontWeight      = 'bold';
+
+        //  Stroke color and thickness
+        text.stroke          = '#000000';
+        text.strokeThickness = 3;
+        text.fill            = '#fff';
+        text.z               = 100;
+
+        text.x               = posX + (self.sprite.width / 2) + 5;
+        text.y               = posY - 5;
+
+        self.playerName      = text;
 
         self.sprite.animations.add('stand-down', [0]);
         self.sprite.animations.add('walk-down', [0, 1, 2]);
@@ -51,6 +65,13 @@
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             phaser.input.onDown.add(handleTouch, this);
         }
+
+        // Testing
+        self.sprite.body.bounce.y     = 0;
+        self.sprite.body.gravity.y    = 0;
+        self.sprite.body.bounce.x     = 0;
+        self.sprite.body.gravity.x    = 0;
+        self.sprite.body.allowGravity = false;
     }
 
     function handleTouch(pointer) {
@@ -79,8 +100,8 @@
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
 
-        self.playerName.x = (player.x + (player.width/2)) - (self.playerName.textWidth/2);
-        self.playerName.y = player.y - self.playerName.textHeight;
+        self.playerName.x = player.x + (player.width / 2) + 5;
+        self.playerName.y = player.y - 5;
 
         // // Moved to destination (touch)
         // if (self.destinationX && self.destinationX < player.x - positionOffset) {
@@ -103,13 +124,6 @@
         // Touch
         if (self.destinationY || self.destinationY){
             phaser.physics.arcade.moveToXY(player, self.destinationX, self.destinationY, 10, baseVelocity);
-        }
-
-        if (parseInt(self.destinationX, 10) === parseInt(player.x, 10) && parseInt(self.destinationY, 10) === parseInt(player.y, 10)) {
-            player.body.velocity.x = 0;
-            player.body.velocity.y = 0;
-            self.destinationX      = false;
-            self.destinationY      = false;
         }
 
         // Up/Down

@@ -63,11 +63,6 @@
 
         phaser.physics.arcade.moveToXY(player, self.destinationX, self.destinationY, 10, baseVelocity);
 
-        if (parseInt(self.destinationX, 10) === parseInt(player.x, 10) && parseInt(self.destinationY, 10) === parseInt(player.y, 10)) {
-            player.body.velocity.x = 0;
-            player.body.velocity.y = 0;
-        }
-
         // if (self.destinationX && self.destinationX < player.x - positionOffset)
         // {
         //     player.body.velocity.x = -baseVelocity;

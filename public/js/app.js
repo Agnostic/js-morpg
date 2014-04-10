@@ -66,15 +66,8 @@
 
   function preload() {
 
-    // phaser.onBlur                        = noop;
-    // phaser.onFocus                       = noop;
-    // phaser.onPause                       = noop;
-    // phaser.onResume                      = noop;
-    // phaser.stage.checkVisibility         = noop;
-    // phaser.stage.disableVisibilityChange = true;
-    // phaser.stage.visibilityChange        = false;
-    // phaser.focusLoss                     = noop;
-    // phaser.focusGain                     = noop;
+    // Disable pause on blur
+    phaser.stage.disableVisibilityChange = true;
 
     // Tilemap
     phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
@@ -91,9 +84,6 @@
   }
 
   function create() {
-
-    // Disable pause on blur
-    phaser.stage.disableVisibilityChange = true;
 
     // Start physics
     phaser.physics.startSystem(Phaser.Physics.ARCADE);
@@ -149,9 +139,6 @@
     var html = "<span class='motd'>Welcome to "+game.title+"!</span><br/>";
     addChatMessage(html);
 
-    // Text example
-        // var text = phaser.add.bitmapText(100, 100, 'default','Bitmap Fonts!', 16);
-
     // Socket.io events
     addSocketListeners();
   }
@@ -195,7 +182,6 @@
     player.destinationX = data.x;
     player.destinationY = data.y;
     player.direction    = data.direction;
-    // TODO: Add animation
   }
 
   function movePlayer(_player) {
