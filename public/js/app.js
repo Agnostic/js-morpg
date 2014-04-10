@@ -150,7 +150,7 @@
     addChatMessage(html);
 
     // Text example
-    var text = phaser.add.bitmapText(100, 100, 'default','Bitmap Fonts!', 16);
+        // var text = phaser.add.bitmapText(100, 100, 'default','Bitmap Fonts!', 16);
 
     // Socket.io events
     addSocketListeners();
@@ -227,7 +227,7 @@
     // Remove player
     game.socket.on('disconnected', function(player) {
       if(player && game.players[player._id]){
-      	game.players[player._id].playerName.destroy();
+        game.players[player._id].playerName.destroy();
         game.players[player._id].sprite.kill();
         delete game.players[player._id];
       }
@@ -263,7 +263,8 @@
     window.onfocus = function(){
       _.each(game.players, function(player){
         if(player.type === 'remote'){
-          phaser.physics.arcade.moveToXY(player.sprite, self.destinationX, self.destinationY, 1, 1);
+          console.log('move player', player);
+          phaser.add.tween(player.sprite.body).to( { x: player.destinationX, y: player.destinationY }, 1, Phaser.Easing.Linear.None, true);
         }
       });
     };
