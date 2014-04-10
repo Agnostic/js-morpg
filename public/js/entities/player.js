@@ -23,6 +23,7 @@
             phaser.physics.enable(self.sprite, Phaser.Physics.ARCADE);
         }
 
+<<<<<<< HEAD
         var text             = phaser.add.text(200, 200, self.name);
         text.align           = 'center';
         text.anchor.set(0.6);
@@ -42,6 +43,12 @@
         text.y               = posY - 5;
 
         self.playerName      = text;
+=======
+        var text          = phaser.add.bitmapText(100, 100, 'default', self.name, 16);
+        self.playerName   = text;
+        self.playerName.x = (self.sprite.x + (self.sprite.width/2)) - (self.playerName.textWidth/2);
+        self.playerName.y = self.sprite.y - self.playerName.textHeight;
+>>>>>>> 3494a15c1138dbf0d6ddcca86d54b99e31d83fd7
 
         self.sprite.animations.add('stand-down', [0]);
         self.sprite.animations.add('walk-down', [0, 1, 2]);
