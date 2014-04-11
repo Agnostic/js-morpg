@@ -150,9 +150,9 @@
   }
 
   function render() {
-    // if (game.localPlayer.sprite) {
-    //   phaser.debug.spriteCoords(game.localPlayer.sprite, 20, 20);
-    // }
+    if (game.localPlayer.sprite) {
+      phaser.debug.spriteCoords(game.localPlayer.sprite, 20, 20);
+    }
   }
 
   function addRemotePlayer(player) {
