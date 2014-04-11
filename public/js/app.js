@@ -2,7 +2,7 @@
 
   // App variables
   var game = root.game = {
-  	title         : 'js-mmo',
+    title         : 'js-mmo',
     entities      : {},
     groups        : {},
     players       : {},
@@ -16,14 +16,6 @@
       , uuri
       , socket;
 
-    // if (global && global.location) {
-    //   uri.protocol = uri.protocol || global.location.protocol.slice(0, -1);
-    //   uri.host = uri.host || (global.document
-    //     ? global.document.domain : global.location.hostname);
-    //   uri.port = uri.port || global.location.port;
-    // }
-
-    console.log('URI', uri);
     uuri = io.util.uniqueUri(uri);
 
     var options = {
@@ -56,12 +48,8 @@
   gameHeight    = 600;
 
   if (navigator.isCocoonJS) {
-    // $('#game, #container')
-    //   .css('width', window.innerWidth)
-    //   .css('height', window.innerHeight);
-
-    gameWidth  = window.innerWidth;
-    gameHeight = window.innerHeight;
+    gameWidth  = window.innerWidth * window.devicePixelRatio;
+    gameHeight = window.innerHeight * window.devicePixelRatio;
   }
 
   function preload() {
@@ -73,15 +61,12 @@
     phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
     phaser.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
 
+    // Player
+    phaser.load.spritesheet('player','assets/sprites/characters.png', 32, 32);
+
     // Fonts
     var fontFile = (navigator.isCocoonJS) ? 'default.xml' : 'default_desktop.xml';
     phaser.load.bitmapFont('default', 'assets/fonts/default.png', 'assets/fonts/' + fontFile);
-
-    // Player
-    // phaser.load.image('player','assets/sprites/phaser-dude.png');
-    phaser.load.spritesheet('player','assets/sprites/characters.png', 32, 32);
-
-    phaser.canvas.id = 'canvas';
   }
 
   function create() {
@@ -110,7 +95,7 @@
     // Player
     var user_id;
     if(game.use_random_id){
-      user_id = 'test_id_'+Math.floor(Math.random(1, 100) * 1000);
+      user_id = 'test_id_'+(Math.floor(Math.random(1, 100) * 1000));
     } else {
       user_id = user._id;
     }

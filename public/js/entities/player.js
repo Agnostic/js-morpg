@@ -50,13 +50,6 @@
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             phaser.input.onDown.add(handleTouch, this);
         }
-
-        // Testing
-        self.sprite.body.bounce.y     = 0;
-        self.sprite.body.gravity.y    = 0;
-        self.sprite.body.bounce.x     = 0;
-        self.sprite.body.gravity.x    = 0;
-        self.sprite.body.allowGravity = false;
     }
 
     function handleTouch(pointer) {
