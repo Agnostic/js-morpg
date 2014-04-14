@@ -9,18 +9,24 @@
     console.log('Game preload');
 
     // Tilemap
-    phaser.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
-    phaser.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
+    this.load.tilemap('desert', 'assets/maps/desert.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.image('tiles', 'assets/maps/sprites/tmw_desert_spacing.png');
 
     // Player
-    phaser.load.spritesheet('player','assets/sprites/characters.png', 32, 32);
+    this.load.spritesheet('player','assets/sprites/characters.png', 32, 32);
 
     // Fonts
     var fontFile = (navigator.isCocoonJS) ? 'default.xml' : 'default_desktop.xml';
-    phaser.load.bitmapFont('default', 'assets/fonts/default.png', 'assets/fonts/' + fontFile);
+    this.load.bitmapFont('default', 'assets/fonts/default.png', 'assets/fonts/' + fontFile);
 
     // Disable pause on blur
-    phaser.stage.disableVisibilityChange = true;
+    this.stage.disableVisibilityChange = true;
+
+    // Gamepad
+    this.load.image('arrow_left', 'assets/images/arrow_left.png');
+    this.load.image('arrow_right', 'assets/images/arrow_right.png');
+    this.load.image('arrow_up', 'assets/images/arrow_up.png');
+    this.load.image('arrow_down', 'assets/images/arrow_down.png');
   };
 
   // Create
@@ -85,6 +91,21 @@
     // Motd
     // var html = "<span class='motd'>Welcome to "+game.title+"!</span><br/>";
     // addChatMessage(html);
+
+    // Gamepad
+    var gamepad                = this.add.group();
+    gamepad.alpha              = 0.5;
+    var gamepad_padding        = 10;
+    var leftArrow              = gamepad.create(0, 0, 'arrow_left');
+    leftArrow.y                += leftArrow.height;
+    var rightArrow             = gamepad.create(leftArrow.width * 2, 0, 'arrow_right');
+    rightArrow.y               += rightArrow.height;
+    var upArrow                = gamepad.create(leftArrow.width, 0, 'arrow_up');
+    var downArrow              = gamepad.create(leftArrow.width, upArrow.height * 2, 'arrow_down');
+    gamepad.scale.x            = 0.5;
+    gamepad.scale.y            = 0.5;
+    gamepad.y                  = phaser.canvas.height - ((leftArrow.height/2) * 3 ) - gamepad_padding;
+    gamepad.x                  += gamepad_padding;
 
     // Socket.io events
     this.addSocketListeners();

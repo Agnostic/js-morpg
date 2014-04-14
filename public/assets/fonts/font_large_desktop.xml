@@ -2,7 +2,7 @@
   <info face="Rudelsberg Alternate" size="72" bold="0" italic="0" charset="" unicode="" stretchH="100" smooth="1" aa="1" padding="2,2,2,2" spacing="0,0" outline="0"/>
   <common lineHeight="79" base="62" scaleW="425" scaleH="512" pages="1" packed="0"/>
   <pages>
-    <page id="0" file="font.png"/>
+    <page id="0" file="font_large.png"/>
   </pages>
   <chars count="80">
     <char id="97" x="2" y="2" width="32" height="40" xoffset="1" yoffset="18" xadvance="31" page="0" chnl="15"/>
