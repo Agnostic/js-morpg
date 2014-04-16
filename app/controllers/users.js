@@ -26,7 +26,10 @@ exports.authCallback = function(req, res) {
 exports.login = function(req, res) {
 
     if(!req.body.username){
-        return res.render('signin', {
+        // return res.render('signin', {
+        //     error: 'Invalid username'
+        // });
+        return res.json({
             error: 'Invalid username'
         });
     }
@@ -37,15 +40,29 @@ exports.login = function(req, res) {
 
             if( doc.authenticate(req.body.password) ){
                 req.session.user = doc;
-                res.redirect('/play');
+                // res.redirect('/play');
+                var userData = doc.toObject();
+                delete userData.password;
+                delete userData.hashed_password;
+                delete userData.salt;
+                res.json({
+                    success: true,
+                    user: userData
+                });
             } else {
-                res.render('signin', {
+                // res.render('signin', {
+                //     error: 'Incorrect password'
+                // });
+                res.json({
                     error: 'Incorrect password'
                 });
             }
 
         } else {
-            res.render('signin', {
+            // res.render('signin', {
+            //     error: 'User not found'
+            // });
+            res.json({
                 error: 'User not found'
             });
         }

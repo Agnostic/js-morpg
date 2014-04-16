@@ -61,9 +61,30 @@
     var login_text             = this.add.bitmapText(form.x + (250/2), form.y + 106, 'font_large', 'Login', 30);
     login_text.x               -= login_text.textWidth/2;
 
+    var user_password          = '';
+
     // Login event
     loginBtn.events.onInputDown.add(function(){
-      console.log('Login!');
+      var params = 'username=' + placeholder1.text + '&password='+user_password;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/signin', true);
+
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+      xhr.onload = function(){
+        var response = {};
+        try {
+          response = JSON.parse(this.responseText);
+        } catch(e) {}
+        if(response.success){
+          game.user = response.user;
+          self.initGame();
+        } else {
+          alert(response.error);
+        }
+      };
+      xhr.send(params);
     });
 
     // Username prompt
@@ -81,13 +102,14 @@
     // Password prompt
     password.events.onInputDown.add(function(){
       game.input({
-        message: 'Type your username',
+        message: 'Type your password',
         callback: function(text) {
           if (text){
             var placeholder = '';
             for (var i=0; i < text.length; i++){
               placeholder += '*';
             }
+            user_password     = text;
             placeholder2.text = placeholder;
           }
         }
@@ -110,7 +132,7 @@
 
   // initGame
   LoginScene.prototype.initGame = function() {
-    this.state.start('game');
+    this.state.start('Game');
   };
 
   // game.scenes.login = LoginScene;
