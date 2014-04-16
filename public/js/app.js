@@ -17,10 +17,10 @@
   game.gameWidth  = 800,
   game.gameHeight = 600;
 
-  if (navigator.isCocoonJS) {
-    game.gameWidth  = window.innerWidth * window.devicePixelRatio;
-    game.gameHeight = window.innerHeight * window.devicePixelRatio;
-  }
+  // if (navigator.isCocoonJS) {
+  //   game.gameWidth  = window.innerWidth * window.devicePixelRatio;
+  //   game.gameHeight = window.innerHeight * window.devicePixelRatio;
+  // }
 
   game.debug = function(message){
     if(game.enableDebug){

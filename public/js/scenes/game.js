@@ -93,19 +93,25 @@
     // addChatMessage(html);
 
     // Gamepad
-    var gamepad                = this.add.group();
-    gamepad.alpha              = 0.5;
-    var gamepad_padding        = 10;
-    var leftArrow              = gamepad.create(0, 0, 'arrow_left');
-    leftArrow.y                += leftArrow.height;
-    var rightArrow             = gamepad.create(leftArrow.width * 2, 0, 'arrow_right');
-    rightArrow.y               += rightArrow.height;
-    var upArrow                = gamepad.create(leftArrow.width, 0, 'arrow_up');
-    var downArrow              = gamepad.create(leftArrow.width, upArrow.height * 2, 'arrow_down');
-    gamepad.scale.x            = 0.5;
-    gamepad.scale.y            = 0.5;
-    gamepad.y                  = phaser.canvas.height - ((leftArrow.height/2) * 3 ) - gamepad_padding;
-    gamepad.x                  += gamepad_padding;
+    var gamepad             = this.add.group();
+    gamepad.alpha           = 0.5;
+    var gamepad_padding     = 10;
+    var leftArrow           = gamepad.create(0, 0, 'arrow_left');
+    leftArrow.inputEnabled  = true;
+    leftArrow.y             += leftArrow.height;
+    var rightArrow          = gamepad.create(leftArrow.width * 2, 0, 'arrow_right');
+    rightArrow.inputEnabled = true;
+    rightArrow.y            += rightArrow.height;
+    var upArrow             = gamepad.create(leftArrow.width, 0, 'arrow_up');
+    upArrow.inputEnabled    = true;
+    var downArrow           = gamepad.create(leftArrow.width, upArrow.height * 2, 'arrow_down');
+    downArrow.inputEnabled  = true;
+    gamepad.scale.x         = 0.5;
+    gamepad.scale.y         = 0.5;
+    gamepad.y               = phaser.canvas.height - ((leftArrow.height/2) * 3 ) - gamepad_padding;
+    gamepad.x               += gamepad_padding;
+
+    var fake                = this.game.add.image(0, 0, '');
 
     // Socket.io events
     this.addSocketListeners();

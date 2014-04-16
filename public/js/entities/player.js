@@ -102,7 +102,7 @@
         // Touch
         if (self.destinationY || self.destinationY){
             // phaser.physics.arcade.moveToXY(player, self.destinationX, self.destinationY, 10, baseVelocity);
-            var duration = (phaser.physics.distanceToPointer(sprite, pointer) / 32) * 1000;
+            var duration = (phaser.physics.distanceToPointer(player, pointer) / 32) * 1000;
             phaser.add.tween(sprite).to({ x: self.destinationX, y: self.destinationY }, duration, Phaser.Easing.Linear.None, true);
         }
 
