@@ -27,6 +27,7 @@
 
   // Create
   LoginScene.prototype.create = function() {
+    var self                   = this;
     this.stage.backgroundColor = 0x2d2d2d;
     var background             = this.add.sprite(0, 0, 'background');
     background.alpha           = 0.4;
@@ -40,11 +41,14 @@
 
     var form                   = this.add.group();
     var username               = form.create(0, 0, 'input');
+    username.inputEnabled      = true;
     username.width             = 250;
     var password               = form.create(0, 50, 'input');
     password.width             = 250;
+    password.inputEnabled      = true;
     var loginBtn               = form.create(0, 100, 'login_btn');
     loginBtn.width             = 250;
+    loginBtn.inputEnabled      = true;
     form.x                     = phaser.canvas.width/2 - 250/2;
     form.y                     = 210;
 
@@ -57,8 +61,41 @@
     var login_text             = this.add.bitmapText(form.x + (250/2), form.y + 106, 'font_large', 'Login', 30);
     login_text.x               -= login_text.textWidth/2;
 
+    // Login event
+    loginBtn.events.onInputDown.add(function(){
+      console.log('Login!');
+    });
+
+    // Username prompt
+    username.events.onInputDown.add(function(){
+      game.input({
+        message: 'Type your username',
+        callback: function(text){
+          if(text){
+            placeholder1.text = text;
+          }
+        }
+      });
+    });
+
+    // Password prompt
+    password.events.onInputDown.add(function(){
+      game.input({
+        message: 'Type your username',
+        callback: function(text) {
+          if (text){
+            var placeholder = '';
+            for (var i=0; i < text.length; i++){
+              placeholder += '*';
+            }
+            placeholder2.text = placeholder;
+          }
+        }
+      });
+    });
+
     // CocoonJS Fix
-    var fake                   = this.game.add.image(0, 0, '');
+    var fake = this.game.add.image(0, 0, '');
   };
 
   // Update
