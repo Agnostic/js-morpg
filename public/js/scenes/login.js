@@ -66,9 +66,10 @@
     // Login event
     loginBtn.events.onInputDown.add(function(){
       var params = 'username=' + placeholder1.text + '&password='+user_password;
+      alert(params);
 
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/signin', true);
+      xhr.open('POST', '/signin?'+params, true);
 
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 

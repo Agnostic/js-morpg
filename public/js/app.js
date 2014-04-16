@@ -56,7 +56,11 @@
 
   // Ready?
   window.onload = function(){
-    phaser.state.start('Login');
+    if(user && user._id){
+      phaser.state.start('Game');
+    } else {
+      phaser.state.start('Login');
+    }
   };
 
 }(window);

@@ -24,8 +24,10 @@ exports.authCallback = function(req, res) {
  * Login
  */
 exports.login = function(req, res) {
+    var username = req.body.username || req.query.username,
+    password     = req.body.password || req.query.password;
 
-    if(!req.body.username){
+    if(!username){
         // return res.render('signin', {
         //     error: 'Invalid username'
         // });
@@ -34,11 +36,11 @@ exports.login = function(req, res) {
         });
     }
 
-    User.findOne({ username: req.body.username }, function(err, doc){
+    User.findOne({ username: username }, function(err, doc){
 
         if(doc){
 
-            if( doc.authenticate(req.body.password) ){
+            if( doc.authenticate(password) ){
                 req.session.user = doc;
                 // res.redirect('/play');
                 var userData = doc.toObject();
