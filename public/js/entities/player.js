@@ -46,19 +46,19 @@
         phaser.camera.follow(self.sprite);
 
         // Touch control
-        game.debug('userAgent -> ' + navigator.userAgent);
-        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-            phaser.input.onDown.add(handleTouch, this);
-        }
+        // game.debug('userAgent -> ' + navigator.userAgent);
+        // if( game.isMobile ) {
+        //     phaser.input.onDown.add(handleTouch, this);
+        // }
     }
 
-    function handleTouch(pointer) {
-        var player          = game.localPlayer;
-        player.destinationX = pointer.x;
-        player.destinationY = pointer.y;
-        game.debug('Moving player to -> x: ' + pointer.x + ' x: ' + pointer.y);
-        // player.direction    = data.direction;
-    }
+    // function handleTouch(pointer) {
+    //     var player          = game.localPlayer;
+    //     player.destinationX = pointer.x;
+    //     player.destinationY = pointer.y;
+    //     game.debug('Moving player to -> x: ' + pointer.x + ' x: ' + pointer.y);
+    //     // player.direction    = data.direction;
+    // }
 
     var onCollision = function(){
     };
@@ -107,22 +107,22 @@
         }
 
         // Up/Down
-        if (cursors.up.isDown) {
+        if (self.movingUp || cursors.up.isDown) {
             player.body.velocity.y = -baseVelocity;
             self.direction         = 'up';
             moveParams.velY        = -baseVelocity;
-        } else if (cursors.down.isDown) {
+        } else if (self.movingDown || cursors.down.isDown) {
             player.body.velocity.y = baseVelocity;
             self.direction         = 'down';
             moveParams.velY        = baseVelocity;
         }
 
         // Left/Right
-        if (cursors.left.isDown) {
+        if (self.movingLeft || cursors.left.isDown) {
             player.body.velocity.x = -baseVelocity;
             self.direction         = 'left';
             moveParams.velX        = -baseVelocity;
-        } else if (cursors.right.isDown) {
+        } else if (self.movingRight || cursors.right.isDown) {
             player.body.velocity.x = baseVelocity;
             self.direction         = 'right';
             moveParams.velX        = baseVelocity;

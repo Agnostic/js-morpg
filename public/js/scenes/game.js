@@ -93,25 +93,60 @@
     // addChatMessage(html);
 
     // Gamepad
-    var gamepad             = this.add.group();
-    gamepad.alpha           = 0.5;
-    var gamepad_padding     = 10;
-    var leftArrow           = gamepad.create(0, 0, 'arrow_left');
-    leftArrow.inputEnabled  = true;
-    leftArrow.y             += leftArrow.height;
-    var rightArrow          = gamepad.create(leftArrow.width * 2, 0, 'arrow_right');
-    rightArrow.inputEnabled = true;
-    rightArrow.y            += rightArrow.height;
-    var upArrow             = gamepad.create(leftArrow.width, 0, 'arrow_up');
-    upArrow.inputEnabled    = true;
-    var downArrow           = gamepad.create(leftArrow.width, upArrow.height * 2, 'arrow_down');
-    downArrow.inputEnabled  = true;
-    gamepad.scale.x         = 0.5;
-    gamepad.scale.y         = 0.5;
-    gamepad.y               = phaser.canvas.height - ((leftArrow.height/2) * 3 ) - gamepad_padding;
-    gamepad.x               += gamepad_padding;
+    if (game.isMobile) {
+      var gamepad             = this.add.group();
+      gamepad.alpha           = 0.5;
+      var gamepad_padding     = 10;
+      var leftArrow           = gamepad.create(0, 0, 'arrow_left');
+      leftArrow.inputEnabled  = true;
+      leftArrow.y             += leftArrow.height;
+      var rightArrow          = gamepad.create(leftArrow.width * 2, 0, 'arrow_right');
+      rightArrow.inputEnabled = true;
+      rightArrow.y            += rightArrow.height;
+      var upArrow             = gamepad.create(leftArrow.width, 0, 'arrow_up');
+      upArrow.inputEnabled    = true;
+      var downArrow           = gamepad.create(leftArrow.width, upArrow.height * 2, 'arrow_down');
+      downArrow.inputEnabled  = true;
+      gamepad.scale.x         = 0.7;
+      gamepad.scale.y         = 0.7;
+      gamepad.y               = phaser.canvas.height - ((leftArrow.height/2) * 3 ) - gamepad_padding;
+      gamepad.x               += gamepad_padding;
 
-    var fake                = this.game.add.image(0, 0, '');
+      // Move up
+      upArrow.events.onInputDown.add(function() {
+        game.localPlayer.movingUp = true;
+      });
+      upArrow.events.onInputUp.add(function() {
+        game.localPlayer.movingUp = false;
+      });
+
+      // Move left
+      leftArrow.events.onInputDown.add(function() {
+        game.localPlayer.movingLeft = true;
+      });
+      leftArrow.events.onInputUp.add(function() {
+        game.localPlayer.movingLeft = false;
+      });
+
+      // Move down
+      downArrow.events.onInputDown.add(function() {
+        game.localPlayer.movingDown = true;
+      });
+      downArrow.events.onInputUp.add(function() {
+        game.localPlayer.movingDown = false;
+      });
+
+      // Move right
+      rightArrow.events.onInputDown.add(function() {
+        game.localPlayer.movingRight = true;
+      });
+      rightArrow.events.onInputUp.add(function() {
+        game.localPlayer.movingRight = false;
+      });
+
+    }
+
+    var fake = this.game.add.image(0, 0, ''); // CocoonJS Fix
 
     // Socket.io events
     this.addSocketListeners();
@@ -125,7 +160,8 @@
     });
 
     game.socket.on('disconnect', function(data){
-      location.href = '/signout';
+      // location.href = '/signout';
+      self.stage.start('Login');
     });
 
     // New player connected
@@ -219,12 +255,12 @@
 
   // Render
   GameScene.prototype.render = function() {
-    console.log('Game render');
+    // console.log('Game render');
   };
 
   // Logout
   GameScene.prototype.logout = function() {
-    this.state.start('login');
+    this.state.start('Login');
   };
 
   window.onfocus = function(){

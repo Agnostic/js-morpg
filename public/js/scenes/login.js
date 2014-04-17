@@ -78,8 +78,13 @@
           response = JSON.parse(this.responseText);
         } catch(e) {}
         if(response.success){
+          // Regenerate Socket.io session
+          game.socket.socket.disconnect();
+          game.socket.socket.connect();
           game.user = response.user;
-          self.initGame();
+          setTimeout(function(){
+            self.initGame();
+          });
         } else {
           alert(response.error);
         }

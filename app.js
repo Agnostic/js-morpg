@@ -30,6 +30,7 @@ var mongoStore = new MongoStore({
 
 // socket.io authorization handler (handshake)
 sio.set('authorization', function (data, callback) {
+  console.log('authorization');
   if(!data.headers.cookie) {
       // Testing
       data.session = { user: {} };

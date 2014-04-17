@@ -8,13 +8,13 @@
     groups        : {},
     players       : {},
     enableDebug   : true,
-    use_random_id : true
+    use_random_id : false // Testing (no session)
   };
 
   game.socket     = io.connect(location.protocol + '//' + location.host);
   noop            = function(){};
 
-  game.gameWidth  = 800,
+  game.gameWidth  = 800;
   game.gameHeight = 600;
 
   // if (navigator.isCocoonJS) {

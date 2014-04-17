@@ -10,4 +10,8 @@
     CocoonJS.App.onTextDialogFinished.addEventListener(callback);
   };
 
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    game.isMobile = true;
+  }
+
 })(game);
