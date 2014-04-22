@@ -19,12 +19,12 @@ html
 
         script(src="/js/vendor/underscore-min.js")
         script.
-            var user;
+            var game = {};
 
         if user
             script.
                 try {
-                    user = !{user};
+                    game.user = !{user};
                 } catch (e) {
                 }
     body

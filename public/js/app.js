@@ -1,15 +1,14 @@
 !function(root){
 
   // App variables
-  var game = root.game = {
-    title         : 'js-mmo',
-    entities      : {},
-    scenes        : {},
-    groups        : {},
-    players       : {},
-    enableDebug   : true,
-    use_random_id : false // Testing (no session)
-  };
+  var game           = root.game;
+  game.title         = 'js-mmo';
+  game.entities      = {};
+  game.scenes        = {};
+  game.groups        = {};
+  game.players       = {};
+  game.enableDebug   = true;
+  game.use_random_id = false; // Testing (no session)
 
   game.socket     = io.connect(location.protocol + '//' + location.host);
   noop            = function(){};
@@ -56,7 +55,7 @@
 
   // Ready?
   window.onload = function(){
-    if(user && user._id){
+    if(game.user && game.user._id){
       phaser.state.start('Game');
     } else {
       phaser.state.start('Login');

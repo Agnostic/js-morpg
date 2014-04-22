@@ -59,12 +59,12 @@
     if(game.use_random_id){
       user_id = 'test_id_'+(Math.floor(Math.random(1, 100) * 1000));
     } else {
-      user_id = user._id;
+      user_id = game.user._id;
     }
 
     game.localPlayer        = new game.entities.Player({
       _id   : user_id,
-      name  : user.username || 'Local player',
+      name  : game.user.username || 'Local player',
       group : game.groups.collisionGroup
     });
     game.players[user_id] = game.localPlayer;
