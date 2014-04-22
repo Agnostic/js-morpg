@@ -9,8 +9,8 @@
     console.log('Login preload');
 
     // Fonts
-    var fontFile = (navigator.isCocoonJS) ? 'default.xml' : 'default_desktop.xml';
-    this.load.bitmapFont('default', 'assets/fonts/default.png', 'assets/fonts/' + fontFile);
+    var fontFile = (navigator.isCocoonJS) ? 'font_medium.xml' : 'font_medium_desktop.xml';
+    this.load.bitmapFont('font_medium', 'assets/fonts/font_medium.png', 'assets/fonts/' + fontFile);
 
     var fontFile2 = (navigator.isCocoonJS) ? 'font_large.xml' : 'font_large_desktop.xml';
     this.load.bitmapFont('font_large', 'assets/fonts/font_large.png', 'assets/fonts/' + fontFile2);
@@ -36,7 +36,7 @@
     title.x                    -= title.textWidth/2;
 
     var subtitle_text          = 'Javascript + WebSockets = Awesome';
-    var subtitle               = this.add.bitmapText(phaser.canvas.width/2, 80+title.textHeight, 'default', subtitle_text, 16);
+    var subtitle               = this.add.bitmapText(phaser.canvas.width/2, 80+title.textHeight, 'font_medium', subtitle_text, 16);
     subtitle.x                 -= subtitle.textWidth/2;
 
     var form                   = this.add.group();
@@ -52,10 +52,10 @@
     form.x                     = phaser.canvas.width/2 - 250/2;
     form.y                     = 210;
 
-    var placeholder1           = this.add.bitmapText(form.x + 15, form.y + 16, 'default', 'Username', 18);
+    var placeholder1           = this.add.bitmapText(form.x + 15, form.y + 10, 'font_medium', 'Username', 22);
     placeholder1.alpha         = 0.7;
 
-    var placeholder2           = this.add.bitmapText(form.x + 15, form.y + 96, 'default', 'Password', 18);
+    var placeholder2           = this.add.bitmapText(form.x + 15, form.y + 90, 'font_medium', 'Password', 22);
     placeholder2.alpha         = 0.7;
 
     var login_text             = this.add.bitmapText(form.x + (loginBtn.width/2), form.y + loginBtn.y + 10, 'font_large', 'Login', 35);
