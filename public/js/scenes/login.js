@@ -42,23 +42,23 @@
     var form                   = this.add.group();
     var username               = form.create(0, 0, 'input');
     username.inputEnabled      = true;
-    username.width             = 250;
-    var password               = form.create(0, 50, 'input');
-    password.width             = 250;
+    // username.width             = 250;
+    var password               = form.create(0, 80, 'input');
+    // password.width             = 250;
     password.inputEnabled      = true;
-    var loginBtn               = form.create(0, 100, 'login_btn');
-    loginBtn.width             = 250;
+    var loginBtn               = form.create(0, 160, 'login_btn');
+    // loginBtn.width             = 250;
     loginBtn.inputEnabled      = true;
     form.x                     = phaser.canvas.width/2 - 250/2;
     form.y                     = 210;
 
-    var placeholder1           = this.add.bitmapText(form.x + 15, form.y + 10, 'default', 'Username', 16);
+    var placeholder1           = this.add.bitmapText(form.x + 15, form.y + 16, 'default', 'Username', 18);
     placeholder1.alpha         = 0.7;
 
-    var placeholder2           = this.add.bitmapText(form.x + 15, form.y + 60, 'default', 'Password', 16);
+    var placeholder2           = this.add.bitmapText(form.x + 15, form.y + 96, 'default', 'Password', 18);
     placeholder2.alpha         = 0.7;
 
-    var login_text             = this.add.bitmapText(form.x + (250/2), form.y + 106, 'font_large', 'Login', 30);
+    var login_text             = this.add.bitmapText(form.x + (loginBtn.width/2), form.y + loginBtn.y + 10, 'font_large', 'Login', 35);
     login_text.x               -= login_text.textWidth/2;
 
     var user_password          = '';
@@ -73,6 +73,7 @@
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
       xhr.onload = function(){
+        login_text.text = 'Login';
         var response = {};
         try {
           response = JSON.parse(this.responseText);
@@ -84,7 +85,7 @@
           game.user = response.user;
           setTimeout(function(){
             self.initGame();
-          });
+          }, 0);
         } else {
           alert(response.error);
         }
@@ -132,7 +133,7 @@
 
   // Render
   LoginScene.prototype.render = function() {
-    phaser.debug.cameraInfo(phaser.camera, 20, 20);
+    // phaser.debug.cameraInfo(phaser.camera, 20, 20);
   };
 
   // initGame

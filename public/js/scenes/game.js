@@ -109,8 +109,10 @@
       downArrow.inputEnabled  = true;
       gamepad.scale.x         = 0.7;
       gamepad.scale.y         = 0.7;
-      gamepad.y               = phaser.canvas.height - ((leftArrow.height/2) * 3 ) - gamepad_padding;
+      gamepad.y               = phaser.canvas.height - ((leftArrow.height/2) * 3 ) - gamepad_padding - 75;
       gamepad.x               += gamepad_padding;
+      gamepad.fixedToCamera   = true;
+
 
       // Move up
       upArrow.events.onInputDown.add(function() {
@@ -161,7 +163,7 @@
 
     game.socket.on('disconnect', function(data){
       // location.href = '/signout';
-      self.stage.start('Login');
+      self.state.start('Login');
     });
 
     // New player connected
