@@ -47,10 +47,7 @@
   // };
 
   // Initializing Phaser
-  var target = 'game';
-  if(navigator.isCocoonJS){
-    target = '';
-  }
+  var target    = navigator.isCocoonJS ? '' : 'game';
   window.phaser = new Phaser.Game(game.gameWidth, game.gameHeight, Phaser.CANVAS, target);
 
   // Ready?
