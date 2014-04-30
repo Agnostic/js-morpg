@@ -27,9 +27,7 @@
       "file": "font_large.png"
     }
   ],
-  "chars": {
-    "count": "80",
-    "char": [
+  "char": [
       {
         "id": "97",
         "x": "2",
@@ -1003,5 +1001,4 @@
         "chnl": "15"
       }
     ]
-  }
 }
