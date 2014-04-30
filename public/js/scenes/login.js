@@ -42,14 +42,11 @@
     var form                   = this.add.group();
     var username               = form.create(0, 0, 'input');
     username.inputEnabled      = true;
-    // username.width             = 250;
     var password               = form.create(0, 80, 'input');
-    // password.width             = 250;
     password.inputEnabled      = true;
     var loginBtn               = form.create(0, 160, 'login_btn');
-    // loginBtn.width             = 250;
     loginBtn.inputEnabled      = true;
-    form.x                     = phaser.canvas.width/2 - 250/2;
+    form.x                     = phaser.canvas.width/2 - username.width/2;
     form.y                     = 210;
 
     var placeholder1           = this.add.bitmapText(form.x + 15, form.y + 10, 'font_medium', 'Username', 22);
