@@ -9,10 +9,10 @@
     console.log('Login preload');
 
     // Fonts
-    var fontFile = (!navigator.isCocoonJS) ? 'font_medium.xml' : 'font_medium_desktop.xml';
+    var fontFile = (navigator.isCocoonJS) ? 'font_medium.xml' : 'font_medium_desktop.xml';
     this.load.bitmapFont('font_medium', 'assets/fonts/font_medium.png', 'assets/fonts/' + fontFile);
 
-    var fontFile2 = (!navigator.isCocoonJS) ? 'font_large.xml' : 'font_large_desktop.xml';
+    var fontFile2 = (navigator.isCocoonJS) ? 'font_large.xml' : 'font_large_desktop.xml';
     this.load.bitmapFont('font_large', 'assets/fonts/font_large.png', 'assets/fonts/' + fontFile2);
 
     // Background
