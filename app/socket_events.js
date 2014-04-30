@@ -8,6 +8,11 @@ module.exports = function(io, socket){
     var player;
 
     socket.on('logon', function(data) {
+        if(!socket.handshake.session || !socket.handshake.session.user){
+            socket.disconnect();
+            return;
+        }
+
         // console.log('Session from socket.io', socket.handshake);
         var player_id = data._id || nextId++;
 
