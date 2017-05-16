@@ -97,6 +97,8 @@ exports.create = function(req, res, next) {
     user.provider = 'local';
     user.save(function(err) {
         if (err) {
+            console.error('Signup error', err);
+
             switch (err.code) {
                 case 11000:
                 case 11001:
